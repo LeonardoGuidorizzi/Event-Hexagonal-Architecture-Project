@@ -1,4 +1,9 @@
 package dev.devdreamer.Event.blindado.casosDeUso;
 
-public interface findEventCaseImpl {
+import dev.devdreamer.Event.blindado.dominio.Event;
+
+import java.util.List;
+
+public interface findEventCase {
+    public List<Event> execute ();
 }
