@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: Event
+
+  datasource:
+    url: jdbc:postgresql://localhost:5431/NameDB
+    username: password__
+    password: password__
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+
+  flyway:
+    enabled: true
+    location: classpath:db/migration
