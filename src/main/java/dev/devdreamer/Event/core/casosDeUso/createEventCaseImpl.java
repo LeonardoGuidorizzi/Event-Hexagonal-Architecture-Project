@@ -1,6 +1,6 @@
 package dev.devdreamer.Event.blindado.casosDeUso;
 
-import dev.devdreamer.Event.blindado.dominio.Event;
+import dev.devdreamer.Event.blindado.domain.Event;
 
 public class createEventCaseImpl implements createEventCase {
 

@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.blindado.dominio;
+package dev.devdreamer.Event.blindado.domain;
 
 import dev.devdreamer.Event.blindado.enums.EventType;
 

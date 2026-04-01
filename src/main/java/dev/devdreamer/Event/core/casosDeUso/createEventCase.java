@@ -1,7 +1,6 @@
 package dev.devdreamer.Event.blindado.casosDeUso;
 
-import dev.devdreamer.Event.blindado.dominio.Event;
-import org.apache.catalina.User;
+import dev.devdreamer.Event.blindado.domain.Event;
 
 public interface createEventCase {
     public Event execute (Event event);
