@@ -1,6 +1,6 @@
-package dev.devdreamer.Event.blindado.domain;
+package dev.devdreamer.Event.core.domain;
 
-import dev.devdreamer.Event.blindado.enums.EventType;
+import dev.devdreamer.Event.core.enums.EventType;
 
 import java.time.LocalDateTime;
 

@@ -1,6 +1,6 @@
-package dev.devdreamer.Event.blindado.casosDeUso;
+package dev.devdreamer.Event.core.casosDeUso;
 
-import dev.devdreamer.Event.blindado.domain.Event;
+import dev.devdreamer.Event.core.domain.Event;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.infrastructure.bancoDeDados;
+package dev.devdreamer.Event.infrastructure.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

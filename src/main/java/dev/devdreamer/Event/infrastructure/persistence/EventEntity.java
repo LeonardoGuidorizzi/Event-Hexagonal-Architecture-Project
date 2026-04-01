@@ -1,6 +1,6 @@
-package dev.devdreamer.Event.infrastructure.bancoDeDados;
+package dev.devdreamer.Event.infrastructure.persistence;
 
-import dev.devdreamer.Event.blindado.enums.EventType;
+import dev.devdreamer.Event.core.enums.EventType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
