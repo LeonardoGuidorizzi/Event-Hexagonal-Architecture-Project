@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.blindado.enums;
+package dev.devdreamer.Event.core.enums;
 
 public enum EventType {
     WORKSHOP,

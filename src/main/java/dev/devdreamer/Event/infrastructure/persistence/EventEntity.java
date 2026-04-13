@@ -1,12 +1,13 @@
-package dev.devdreamer.Event.infrastructure.bancoDeDados;
+package dev.devdreamer.Event.infrastructure.persistence;
 
-import dev.devdreamer.Event.blindado.enums.EventType;
+import dev.devdreamer.Event.core.enums.EventType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "tb_event")
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class EventEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     @Column(length = 255, nullable = false)
     private String name;
     @Column(length = 255, nullable = false)
@@ -39,4 +40,16 @@ public class EventEntity {
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
