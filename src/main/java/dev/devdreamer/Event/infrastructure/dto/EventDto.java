@@ -10,7 +10,7 @@ public record EventDto(
         String identifier,
         String local,
         String host,
-        String capacity,
+        Integer capacity,
         EventType eventType,
         LocalDateTime start,
         LocalDateTime end
