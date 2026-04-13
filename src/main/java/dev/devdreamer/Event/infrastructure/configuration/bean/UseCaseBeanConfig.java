@@ -1,6 +1,5 @@
-package dev.devdreamer.Event.infrastructure.bean;
+package dev.devdreamer.Event.infrastructure.configuration.bean;
 
-import dev.devdreamer.Event.core.domain.Event;
 import dev.devdreamer.Event.core.gateway.EventGateway;
 import dev.devdreamer.Event.core.usecases.CreateEventUseCase;
 import dev.devdreamer.Event.core.usecases.CreateEventUseCaseImpl;
