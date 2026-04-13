@@ -5,10 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "tb_event")
@@ -17,12 +15,8 @@ import java.util.UUID;
 @Data
 public class EventEntity {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            type = org.hibernate.id.uuid.UuidGenerator.class
-    )
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(length = 255, nullable = false)
     private String name;
     @Column(length = 255, nullable = false)
@@ -46,4 +40,16 @@ public class EventEntity {
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
