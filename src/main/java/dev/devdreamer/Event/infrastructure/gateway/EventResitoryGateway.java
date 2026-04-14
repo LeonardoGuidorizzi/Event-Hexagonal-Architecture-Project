@@ -31,5 +31,10 @@ public class EventResitoryGateway implements EventGateway {
         return entities.stream().map(mapper::toDomain).toList();
     }
 
+    @Override
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+
 
 }
