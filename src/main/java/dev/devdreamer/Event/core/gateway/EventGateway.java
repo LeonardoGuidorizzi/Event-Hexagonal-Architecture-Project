@@ -8,4 +8,8 @@ public interface EventGateway {
     Event createEvent (Event event);
 
     List<Event> findEvent ();
+
+    void deleteById(Long id);
+
+    Event updateEvent(Long id, Event event);
 }
