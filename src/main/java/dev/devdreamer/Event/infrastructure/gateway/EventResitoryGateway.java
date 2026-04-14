@@ -8,6 +8,7 @@ import dev.devdreamer.Event.infrastructure.persistence.EventRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class EventResitoryGateway implements EventGateway {
@@ -34,6 +35,14 @@ public class EventResitoryGateway implements EventGateway {
     @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public Event updateEvent(Long id, Event event) {
+      EventEntity foundEvent = repository.findById(id).orElseThrow(()-> new RuntimeException("Event not found"));
+      mapper.updateEntityFromDomain(event, foundEvent);
+      EventEntity updated = repository.save(foundEvent);
+      return mapper.toDomain(updated);
     }
 
 

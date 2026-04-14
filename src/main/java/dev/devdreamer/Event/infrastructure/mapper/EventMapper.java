@@ -73,5 +73,19 @@ public class EventMapper {
         entity.setEnd(event.end());
         return entity;
     }
+
+
+
+    public void updateEntityFromDomain(Event domain, EventEntity entity) {
+        if (domain.name() != null) entity.setName(domain.name());
+        if (domain.description() != null) entity.setDescription(domain.description());
+        if (domain.identifier() != null) entity.setIdentifier(domain.identifier());
+        if (domain.local() != null ) entity.setLocal(domain.local());
+        if (domain.host() != null) entity.setHost(domain.host());
+        if (domain.capacity() != 0) entity.setCapacity(domain.capacity());
+        if (domain.eventType() != null) entity.setEventType(domain.eventType());
+        if (domain.start() != null) entity.setStart(domain.start());
+        if (domain.end() != null ) entity.setEnd(domain.end());
+   }
 }
 

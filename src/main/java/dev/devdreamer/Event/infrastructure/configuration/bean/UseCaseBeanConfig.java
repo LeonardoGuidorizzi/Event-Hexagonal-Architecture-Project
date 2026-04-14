@@ -12,6 +12,7 @@ public class UseCaseBeanConfig {
     public CreateEventUseCase createEventUseCase (EventGateway eventGateway){
         return new CreateEventUseCaseImpl(eventGateway);
     }
+
     @Bean
     public FindEventUseCase findEventUseCase(EventGateway eventGateway){
         return new FindEventUseCaseImpl(eventGateway);
@@ -20,5 +21,9 @@ public class UseCaseBeanConfig {
     @Bean
     public DeleteEventUseCase deleteEventUseCase(EventGateway eventGateway) {
         return new DeleteEventUseCaseImpl(eventGateway);
+    }
+
+    @Bean UpdateEventUseCase updateEventUseCase(EventGateway eventGateway){
+        return new UpdateEventUseCaseImpl(eventGateway);
     }
 }
