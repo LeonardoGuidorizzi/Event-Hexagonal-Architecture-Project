@@ -1,8 +1,11 @@
-package dev.devdreamer.Event.presentation;
+package dev.devdreamer.Event.adapter.inbound.presentation;
 
+import dev.devdreamer.Event.application.usecases.CreateEventUseCase;
+import dev.devdreamer.Event.application.usecases.DeleteEventUseCase;
+import dev.devdreamer.Event.application.usecases.FindEventUseCase;
+import dev.devdreamer.Event.application.usecases.UpdateEventUseCase;
 import dev.devdreamer.Event.core.domain.Event;
-import dev.devdreamer.Event.core.usecases.*;
-import dev.devdreamer.Event.infrastructure.mapper.EventMapper;
+import dev.devdreamer.utils.mapper.EventMapper;
 import dev.devdreamer.Event.infrastructure.dto.EventDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

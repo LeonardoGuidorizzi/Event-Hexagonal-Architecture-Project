@@ -1,8 +1,8 @@
-package dev.devdreamer.Event.infrastructure.mapper;
+package dev.devdreamer.utils.mapper;
 
 import dev.devdreamer.Event.core.domain.Event;
 import dev.devdreamer.Event.infrastructure.dto.EventDto;
-import dev.devdreamer.Event.infrastructure.persistence.EventEntity;
+import dev.devdreamer.Event.adapter.outbound.persistence.EventEntity;
 import org.springframework.stereotype.Component;
 
 @Component

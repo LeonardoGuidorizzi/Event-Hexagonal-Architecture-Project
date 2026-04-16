@@ -1,8 +1,7 @@
-package dev.devdreamer.Event.core.usecases;
+package dev.devdreamer.Event.application.usecases;
 
 import dev.devdreamer.Event.core.domain.Event;
 import dev.devdreamer.Event.core.gateway.EventGateway;
-import org.apache.catalina.User;
 
 public class UpdateEventUseCaseImpl implements UpdateEventUseCase {
     private final EventGateway eventGateway;

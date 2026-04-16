@@ -2,13 +2,12 @@ package dev.devdreamer.Event.infrastructure.gateway;
 
 import dev.devdreamer.Event.core.domain.Event;
 import dev.devdreamer.Event.core.gateway.EventGateway;
-import dev.devdreamer.Event.infrastructure.mapper.EventMapper;
-import dev.devdreamer.Event.infrastructure.persistence.EventEntity;
-import dev.devdreamer.Event.infrastructure.persistence.EventRepository;
+import dev.devdreamer.utils.mapper.EventMapper;
+import dev.devdreamer.Event.adapter.outbound.persistence.EventEntity;
+import dev.devdreamer.Event.adapter.outbound.persistence.EventRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class EventResitoryGateway implements EventGateway {

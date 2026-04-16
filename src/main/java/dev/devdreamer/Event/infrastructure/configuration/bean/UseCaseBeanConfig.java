@@ -1,10 +1,10 @@
 package dev.devdreamer.Event.infrastructure.configuration.bean;
 
+import dev.devdreamer.Event.application.usecases.*;
 import dev.devdreamer.Event.core.gateway.EventGateway;
-import dev.devdreamer.Event.core.usecases.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+//todo tipo de configuração vem aqui dentro do infrastructure/ excessões também
 
 @Configuration
 public class UseCaseBeanConfig {
@@ -23,7 +23,8 @@ public class UseCaseBeanConfig {
         return new DeleteEventUseCaseImpl(eventGateway);
     }
 
-    @Bean UpdateEventUseCase updateEventUseCase(EventGateway eventGateway){
+    @Bean
+    UpdateEventUseCase updateEventUseCase(EventGateway eventGateway){
         return new UpdateEventUseCaseImpl(eventGateway);
     }
 }

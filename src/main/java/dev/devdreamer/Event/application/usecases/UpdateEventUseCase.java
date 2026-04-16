@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.core.usecases;
+package dev.devdreamer.Event.application.usecases;
 
 import dev.devdreamer.Event.core.domain.Event;
 import org.apache.catalina.User;
