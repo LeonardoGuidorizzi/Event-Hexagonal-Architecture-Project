@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.adapter.inbound.presentation;
+package dev.devdreamer.Event.infrastructure.adapter.inbound.presentation;
 
 import dev.devdreamer.Event.application.usecases.CreateEventUseCase;
 import dev.devdreamer.Event.application.usecases.DeleteEventUseCase;
