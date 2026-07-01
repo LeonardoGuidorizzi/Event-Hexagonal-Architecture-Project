@@ -1,20 +1,19 @@
 package dev.devdreamer.Event.infrastructure.gateway;
 
 import dev.devdreamer.Event.core.domain.Event;
-import dev.devdreamer.Event.core.gateway.EventGateway;
+import dev.devdreamer.Event.core.port.out.EventRepository;
 import dev.devdreamer.utils.mapper.EventMapper;
 import dev.devdreamer.Event.adapter.outbound.persistence.EventEntity;
-import dev.devdreamer.Event.adapter.outbound.persistence.EventRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class EventResitoryGateway implements EventGateway {
-    private final EventRepository repository;
+public class EventResitoryRepository implements EventRepository {
+    private final dev.devdreamer.Event.adapter.outbound.persistence.EventRepository repository;
     private final EventMapper mapper;
 
-    public EventResitoryGateway(EventRepository repository, EventMapper mapper) {
+    public EventResitoryRepository(dev.devdreamer.Event.adapter.outbound.persistence.EventRepository repository, EventMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
@@ -26,7 +25,7 @@ public class EventResitoryGateway implements EventGateway {
     }
 
     @Override
-    public List<Event> findEvent() {
+    public List<Event> findEventById() {
         List<EventEntity> entities = repository.findAll();
         return entities.stream().map(mapper::toDomain).toList();
     }
@@ -38,10 +37,7 @@ public class EventResitoryGateway implements EventGateway {
 
     @Override
     public Event updateEvent(Long id, Event event) {
-      EventEntity foundEvent = repository.findById(id).orElseThrow(()-> new RuntimeException("Event not found"));
-      mapper.updateEntityFromDomain(event, foundEvent);
-      EventEntity updated = repository.save(foundEvent);
-      return mapper.toDomain(updated);
+
     }
 
 

@@ -1,11 +1,11 @@
 package dev.devdreamer.Event.application.usecases;
 
-import dev.devdreamer.Event.core.gateway.EventGateway;
+import dev.devdreamer.Event.core.port.out.EventRepository;
 
 public class DeleteEventUseCaseImpl implements DeleteEventUseCase{
-    private final EventGateway eventGateway;
+    private final EventRepository eventGateway;
 
-    public DeleteEventUseCaseImpl(EventGateway eventGateway) {
+    public DeleteEventUseCaseImpl(EventRepository eventGateway) {
         this.eventGateway = eventGateway;
     }
 

@@ -1,11 +1,11 @@
 package dev.devdreamer.Event.application.usecases;
 
 import dev.devdreamer.Event.core.domain.Event;
-import dev.devdreamer.Event.core.gateway.EventGateway;
+import dev.devdreamer.Event.core.port.out.EventRepository;
 
 public class UpdateEventUseCaseImpl implements UpdateEventUseCase {
-    private final EventGateway eventGateway;
-    public UpdateEventUseCaseImpl(EventGateway eventGateway) {
+    private final EventRepository eventGateway;
+    public UpdateEventUseCaseImpl(EventRepository eventGateway) {
         this.eventGateway = eventGateway;
     }
 
