@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.infrastructure.adapter.outbound.persistence;
+package dev.devdreamer.Event.infrastructure.adapter.out.persistence;
 
 import dev.devdreamer.Event.core.enums.EventType;
 import jakarta.persistence.*;

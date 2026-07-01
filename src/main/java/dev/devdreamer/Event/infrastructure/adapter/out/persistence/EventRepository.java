@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.infrastructure.adapter.outbound.persistence;
+package dev.devdreamer.Event.infrastructure.adapter.out.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
