@@ -3,15 +3,16 @@ package dev.devdreamer.Event.application.port.out;
 import dev.devdreamer.Event.core.domain.Event;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EventRepository {
     Event save (Event event);
 
+    Event findEventByStatus(String status);
+
+    Optional<Event> findEventById(String id);
+
     List<Event> findAll ();
-
-    List<Event> findEventById();
-
-    List<Event> findEventByStatus(String name);
 
     void deleteById(Long id);
 

@@ -7,6 +7,9 @@ import dev.devdreamer.Event.infrastructure.adapter.out.persistence.mapper.EventJ
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @Component
 public class EventConverter implements EventRepository {
 private final EventJpaMapper mapper;
@@ -25,18 +28,20 @@ private final EventJpaRepository repository;
     }
 
     @Override
+    public Optional<Event> findEventById(String id) {
+        return repository.findById(UUID.fromString(id)).map(mapper::toDomain);
+    }
+
+    @Override
     public List<Event> findAll() {
         return List.of();
     }
 
-    @Override
-    public List<Event> findEventById() {
-        return List.of();
-    }
+
 
     @Override
-    public List<Event> findEventByStatus(String name) {
-        return List.of();
+    public Event findEventByStatus(String status) {
+        return null;
     }
 
     @Override
