@@ -4,10 +4,12 @@ import dev.devdreamer.Event.application.port.in.CancelEventUseCase;
 import dev.devdreamer.Event.application.port.out.EventRepository;
 import dev.devdreamer.Event.core.domain.Event;
 import dev.devdreamer.Event.core.exception.EventNotFoundException;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.UUID;
 
+@Service
+@Transactional
 public class CancelEventService implements CancelEventUseCase {
     final EventRepository repository;
 
