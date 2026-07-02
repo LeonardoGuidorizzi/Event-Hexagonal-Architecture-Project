@@ -4,6 +4,7 @@ import dev.devdreamer.Event.core.enums.EventStatus;
 import dev.devdreamer.Event.core.enums.EventType;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 import java.util.UUID;
 
 public class Event {
@@ -14,7 +15,7 @@ public class Event {
     String local;
     String host;
     Integer capacity;
-    Integer registeredParticipantCapacity;
+    Integer registeredCount ;
     EventType eventType;
     EventStatus status;
     LocalDateTime start;
@@ -32,7 +33,7 @@ public class Event {
             String identifier,
             String local,
             String host,
-            Integer registeredParticipantCapacity,
+            Integer registeredCount ,
             Integer capacity,
             EventType eventType,
             EventStatus status,
@@ -46,7 +47,7 @@ public class Event {
         this.identifier = identifier;
         this.local = local;
         this.host = host;
-        this.registeredParticipantCapacity = registeredParticipantCapacity;
+        this.registeredCount  = registeredCount ;
         this.capacity = capacity;
         this.eventType = eventType;
         this.status = status;
@@ -59,7 +60,6 @@ public class Event {
     public static Event create(
             String name,
             String description,
-            String identifier,
             String local,
             String host,
             Integer capacity,
@@ -70,7 +70,6 @@ public class Event {
         validate(
                 name,
                 description,
-                identifier,
                 local,
                 host,
                 capacity,
@@ -78,13 +77,13 @@ public class Event {
                 start,
                 end);
         Event event = new Event();
-        event.id = UUID.randomUUID().toString();
         event.name = name;
         event.description = description;
-        event.identifier = identifier;
+        event.identifier = generateIdentifier();
         event.local = local;
         event.host = host;
         event.capacity = capacity;
+        event.registeredCount = 0;
         event.eventType = eventType;
         event.status = EventStatus.DRAFT;
         event.start = start;
@@ -110,23 +109,26 @@ public class Event {
         if(this.status != EventStatus.PUBLISHED){
             throw new IllegalArgumentException("Inscrições só são permitidas em publicação");
         }
-        if(this.registeredParticipantCapacity > this.capacity ){
+        if(this.registeredCount  > this.capacity ){
             throw new IllegalArgumentException("Limite excedido, não é possivel adicionar mais participantes");
         }
-        this.registeredParticipantCapacity ++;
+        this.registeredCount ++;
     }
 
+    public boolean hasAvailableSlots() {
+        return this.registeredCount < this.capacity;
+    }
 
+    public int availableSlots() {
+        return this.capacity - this.registeredCount;
+    }
 
-    public static void validate(String name, String description, String identifier, String local, String host, Integer capacity, EventType eventType, LocalDateTime start, LocalDateTime end){
+    public static void validate(String name, String description,  String local, String host, Integer capacity, EventType eventType, LocalDateTime start, LocalDateTime end){
      if(name == null || name.isBlank()){
          throw new IllegalArgumentException("O nome do Evento é obrigatorio");
      }
      if(description == null || description.isBlank()){
          throw new IllegalArgumentException("A descrição do Evento é obrigatorio");
-     }
-     if(identifier == null || identifier.isBlank()){
-         throw new IllegalArgumentException("O identificador é obrigatorio");
      }
      if(local == null || local.isBlank()){
          throw new IllegalArgumentException("O local do Evento é obrigatorio");
@@ -140,9 +142,13 @@ public class Event {
      if(capacity == null || capacity <= 0){
          throw new IllegalArgumentException("A capacidade do Evento precisa ser maior que zero");
      }
-     if(!start.isAfter(end)){
-         throw new IllegalArgumentException("O Evento deve ser posterior ao ultimo dia do evento");
+     if(!end.isAfter(start)){
+         throw new IllegalArgumentException("Data de fim deve ser posterior à data de início.");
      }
+    }
+
+    public static String generateIdentifier(){
+         return String.valueOf(10000 + new Random().nextInt(10000));
     }
 
 
@@ -174,8 +180,8 @@ public class Event {
         return capacity;
     }
 
-    public Integer getRegisteredParticipantCapacity() {
-        return registeredParticipantCapacity;
+    public Integer getRegisteredCount () {
+        return registeredCount ;
     }
 
     public EventType getEventType() {
@@ -230,8 +236,8 @@ public class Event {
         this.capacity = capacity;
     }
 
-    public void setRegisteredParticipantCapacity(Integer registeredParticipantCapacity) {
-        this.registeredParticipantCapacity = registeredParticipantCapacity;
+    public void setRegisteredCount (Integer registeredCount ) {
+        this.registeredCount  = registeredCount ;
     }
 
     public void setEventType(EventType eventType) {
