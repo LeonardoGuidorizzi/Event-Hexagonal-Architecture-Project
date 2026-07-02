@@ -1,6 +1,8 @@
 package dev.devdreamer.Event.infrastructure.adapter.in.presentation;
 
+import dev.devdreamer.Event.application.port.in.CancelEventUseCase;
 import dev.devdreamer.Event.application.port.in.CreateEventUseCase;
+import dev.devdreamer.Event.application.port.in.PublishEventUseCase;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.Mapper.EventMapper;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.CreateEventRequest;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.EventResponse;
@@ -17,10 +19,14 @@ import java.util.List;
 public class EventPresentation {
 
     private final CreateEventUseCase createEventUseCase;
+    private final PublishEventUseCase publishEventUseCase;
+    private final CancelEventUseCase cancelEventUseCase;
     private final EventMapper mapper;
 
-    public EventPresentation(CreateEventUseCase createEventUseCase,  EventMapper mapper ) {
+    public EventPresentation(CreateEventUseCase createEventUseCase,PublishEventUseCase publishEventUseCase,  CancelEventUseCase cancelEventUseCase,  EventMapper mapper ) {
         this.createEventUseCase = createEventUseCase;
+        this.publishEventUseCase = publishEventUseCase;
+        this.cancelEventUseCase = cancelEventUseCase;
         this.mapper = mapper;
     }
 
@@ -31,7 +37,19 @@ public class EventPresentation {
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(event));
     }
 
-//    @GetMapping("getAll")
+    @PostMapping("publish/{id}")
+    public ResponseEntity<EventResponse> publishEvent(@PathVariable String id){
+        var event = publishEventUseCase.execute(id);
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.toResponse(event));
+    }
+
+    @PostMapping("cancel/{id}")
+    public ResponseEntity<EventResponse> cancelEvent(@PathVariable String id){
+        var event = cancelEventUseCase.execute(id);
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.toResponse(event));
+    }
+
+//    @GetMapping("publish/{id}")
 //    public ResponseEntity<List<EventDto>> getAllEvent(){
 //        List<EventDto> events = findEventUseCase.execute()
 //                .stream()
