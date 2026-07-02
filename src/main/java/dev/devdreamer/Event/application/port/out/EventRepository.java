@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.core.port.out;
+package dev.devdreamer.Event.application.port.out;
 
 import dev.devdreamer.Event.core.domain.Event;
 

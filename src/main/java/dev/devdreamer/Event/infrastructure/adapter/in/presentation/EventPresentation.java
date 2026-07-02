@@ -1,9 +1,7 @@
 package dev.devdreamer.Event.infrastructure.adapter.in.presentation;
 
-import dev.devdreamer.Event.application.usecases.CreateEventUseCase;
-import dev.devdreamer.Event.application.usecases.DeleteEventUseCase;
-import dev.devdreamer.Event.application.usecases.FindEventUseCase;
-import dev.devdreamer.Event.application.usecases.UpdateEventUseCase;
+import dev.devdreamer.Event.application.port.in.CreateEventUseCase;
+import dev.devdreamer.Event.application.port.in.UpdateEventUseCase;
 import dev.devdreamer.Event.core.domain.Event;
 import dev.devdreamer.utils.mapper.EventMapper;
 import dev.devdreamer.Event.infrastructure.dto.EventDto;

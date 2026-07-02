@@ -1,7 +1,9 @@
 package dev.devdreamer.Event.infrastructure.configuration.bean;
 
+import dev.devdreamer.Event.application.port.in.CreateEventUseCase;
+import dev.devdreamer.Event.application.port.in.UpdateEventUseCase;
 import dev.devdreamer.Event.application.usecases.*;
-import dev.devdreamer.Event.core.port.out.EventRepository;
+import dev.devdreamer.Event.application.port.out.EventRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 //todo tipo de configuração vem aqui dentro do infrastructure/ excessões também

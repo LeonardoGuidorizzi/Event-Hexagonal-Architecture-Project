@@ -1,9 +1,9 @@
 package dev.devdreamer.Event.infrastructure.gateway;
 
 import dev.devdreamer.Event.core.domain.Event;
-import dev.devdreamer.Event.core.port.out.EventRepository;
+import dev.devdreamer.Event.application.port.out.EventRepository;
 import dev.devdreamer.utils.mapper.EventMapper;
-import dev.devdreamer.Event.infrastructure.adapter.out.persistence.EventEntity;
+import dev.devdreamer.Event.infrastructure.adapter.out.persistence.entity.EventEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

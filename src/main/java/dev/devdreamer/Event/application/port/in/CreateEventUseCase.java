@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.application.usecases;
+package dev.devdreamer.Event.application.port.in;
 
 import dev.devdreamer.Event.core.domain.Event;
 
