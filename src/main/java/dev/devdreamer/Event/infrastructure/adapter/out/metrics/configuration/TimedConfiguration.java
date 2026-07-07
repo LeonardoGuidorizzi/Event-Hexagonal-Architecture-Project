@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.infrastructure.adapter.out.metrics;
+package dev.devdreamer.Event.infrastructure.adapter.out.metrics.configuration;
 
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;
