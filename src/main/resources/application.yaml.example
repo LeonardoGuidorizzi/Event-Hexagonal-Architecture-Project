@@ -14,3 +14,14 @@ spring:
   flyway:
     enabled: true
     location: classpath:db/migration
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  datadog:
+    metrics:
+      export:
+        api-key: ""
+        application-key: ""
+        uri: "https://app.datadoghq.com"
