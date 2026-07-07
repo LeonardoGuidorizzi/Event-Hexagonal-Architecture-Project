@@ -6,6 +6,7 @@ import dev.devdreamer.Event.application.port.in.PublishEventUseCase;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.Mapper.EventMapper;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.CreateEventRequest;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.EventResponse;
+import io.micrometer.core.annotation.Timed;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,39 +37,18 @@ public class EventPresentation {
         var event = createEventUseCase.execute(command);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(event));
     }
-
+    @Timed(value = "PublishEventEndPoint", description = "it shows how long it takes to give the publish result")
     @PostMapping("publish/{id}")
     public ResponseEntity<EventResponse> publishEvent(@PathVariable String id){
         var event = publishEventUseCase.execute(id);
         return ResponseEntity.status(HttpStatus.OK).body(mapper.toResponse(event));
     }
-
+    @Timed(value = "CancelEventEndPoint", description = "it shows how long it takes to give the cancel result")
     @PostMapping("cancel/{id}")
     public ResponseEntity<EventResponse> cancelEvent(@PathVariable String id){
         var event = cancelEventUseCase.execute(id);
         return ResponseEntity.status(HttpStatus.OK).body(mapper.toResponse(event));
     }
-
-//    @GetMapping("publish/{id}")
-//    public ResponseEntity<List<EventDto>> getAllEvent(){
-//        List<EventDto> events = findEventUseCase.execute()
-//                .stream()
-//                .map(mapper::toDto)
-//                .toList();
-//        return ResponseEntity.ok(events);
-//    }
-//
-//    @DeleteMapping("delete/{id}")
-//    public ResponseEntity<Void> deleteEventById(@PathVariable Long id){
-//        deleteEventUseCase.execute(id);
-//        return ResponseEntity.noContent().build();
-//    }
-//
-//    @DeleteMapping("update/{id}")
-//    public ResponseEntity<EventDto> updateEvent(@PathVariable Long id,@RequestBody EventDto request ){
-//        Event event = updateEventUseCase.execute(id, mapper.toDomain(request));
-//        return ResponseEntity.ok(mapper.toDto(event));
-//    }
 
 
 }
