@@ -1,11 +1,10 @@
-package dev.devdreamer.Event.core.domain;
+package dev.devdreamer.Event.domain;
 
-import dev.devdreamer.Event.core.enums.EventStatus;
-import dev.devdreamer.Event.core.enums.EventType;
+import dev.devdreamer.Event.domain.enums.EventStatus;
+import dev.devdreamer.Event.domain.enums.EventType;
 
 import java.time.LocalDateTime;
 import java.util.Random;
-import java.util.UUID;
 
 public class Event {
     String id;
