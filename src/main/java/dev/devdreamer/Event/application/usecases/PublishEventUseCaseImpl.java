@@ -2,16 +2,14 @@ package dev.devdreamer.Event.application.usecases;
 
 import dev.devdreamer.Event.application.port.in.PublishEventUseCase;
 import dev.devdreamer.Event.application.port.out.EventRepository;
-import dev.devdreamer.Event.core.domain.Event;
-import dev.devdreamer.Event.core.exception.EventNotFoundException;
+import dev.devdreamer.Event.domain.Event;
+import dev.devdreamer.Event.domain.exception.EventNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
-@Service
 @Transactional
-public class PublishEventService implements PublishEventUseCase {
+public class PublishEventUseCaseImpl implements PublishEventUseCase {
     final EventRepository repository;
-    public PublishEventService(EventRepository repository) {
+    public PublishEventUseCaseImpl(EventRepository repository) {
         this.repository = repository;
     }
 

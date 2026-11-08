@@ -1,6 +1,6 @@
 package dev.devdreamer.Event.application.port.in;
 
-import dev.devdreamer.Event.core.domain.Event;
+import dev.devdreamer.Event.domain.Event;
 
 import java.util.List;
 

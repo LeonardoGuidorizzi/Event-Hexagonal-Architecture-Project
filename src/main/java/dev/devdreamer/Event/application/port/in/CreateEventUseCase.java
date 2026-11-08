@@ -1,8 +1,7 @@
 package dev.devdreamer.Event.application.port.in;
 
-import dev.devdreamer.Event.core.domain.Event;
-import dev.devdreamer.Event.core.enums.EventStatus;
-import dev.devdreamer.Event.core.enums.EventType;
+import dev.devdreamer.Event.domain.Event;
+import dev.devdreamer.Event.domain.enums.EventType;
 
 import java.time.LocalDateTime;
 

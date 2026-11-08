@@ -1,14 +1,13 @@
 package dev.devdreamer.Event.infrastructure.adapter.out.persistence.entity;
 
-import dev.devdreamer.Event.core.enums.EventStatus;
-import dev.devdreamer.Event.core.enums.EventType;
+import dev.devdreamer.Event.domain.enums.EventStatus;
+import dev.devdreamer.Event.domain.enums.EventType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Random;
 import java.util.UUID;
 
 @Entity

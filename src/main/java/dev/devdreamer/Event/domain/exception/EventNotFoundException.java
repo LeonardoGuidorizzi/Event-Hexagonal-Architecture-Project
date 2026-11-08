@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.core.exception;
+package dev.devdreamer.Event.domain.exception;
 
 public class EventNotFoundException extends RuntimeException {
     public EventNotFoundException(String id) {

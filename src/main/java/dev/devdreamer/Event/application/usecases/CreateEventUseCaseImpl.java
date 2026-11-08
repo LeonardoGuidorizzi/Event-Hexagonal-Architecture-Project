@@ -2,16 +2,14 @@ package dev.devdreamer.Event.application.usecases;
 
 import dev.devdreamer.Event.application.port.in.CreateEventUseCase;
 import dev.devdreamer.Event.application.port.out.EventRepository;
-import dev.devdreamer.Event.core.domain.Event;
+import dev.devdreamer.Event.domain.Event;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
-@Service
 @Transactional
-public class CreateEventService implements CreateEventUseCase {
+public class CreateEventUseCaseImpl implements CreateEventUseCase {
     private final EventRepository repository;
 
-    public CreateEventService(EventRepository repository) {
+    public CreateEventUseCaseImpl(EventRepository repository) {
         this.repository = repository;
     }
 

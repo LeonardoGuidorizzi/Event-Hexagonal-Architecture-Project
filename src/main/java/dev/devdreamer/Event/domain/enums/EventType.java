@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.core.enums;
+package dev.devdreamer.Event.domain.enums;
 
 public enum EventType {
     WORKSHOP,
