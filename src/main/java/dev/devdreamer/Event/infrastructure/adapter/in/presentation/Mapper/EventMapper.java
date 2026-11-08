@@ -1,7 +1,7 @@
 package dev.devdreamer.Event.infrastructure.adapter.in.presentation.Mapper;
 
 import dev.devdreamer.Event.application.port.in.CreateEventUseCase.CreateEventCommand;
-import dev.devdreamer.Event.core.domain.Event;
+import dev.devdreamer.Event.domain.Event;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.CreateEventRequest;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.EventResponse;
 import org.springframework.stereotype.Component;

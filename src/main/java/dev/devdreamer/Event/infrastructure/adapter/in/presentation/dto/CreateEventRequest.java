@@ -1,6 +1,6 @@
 package dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto;
 
-import dev.devdreamer.Event.core.enums.EventType;
+import dev.devdreamer.Event.domain.enums.EventType;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
