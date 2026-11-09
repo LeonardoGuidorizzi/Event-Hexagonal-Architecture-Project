@@ -1,5 +1,7 @@
 package dev.devdreamer.Event.infrastructure.adapter.in.presentation;
 
+import dev.devdreamer.Event.application.model.PageRequest;
+import dev.devdreamer.Event.application.model.PageResult;
 import dev.devdreamer.Event.application.port.in.CancelEventUseCase;
 import dev.devdreamer.Event.application.port.in.CreateEventUseCase;
 import dev.devdreamer.Event.application.port.in.ListEventsUseCase;
@@ -7,6 +9,7 @@ import dev.devdreamer.Event.application.port.in.PublishEventUseCase;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.Mapper.EventMapper;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.CreateEventRequest;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.EventResponse;
+import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.micrometer.core.annotation.Timed;
@@ -16,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Controller
 @RequestMapping("api/v1/")
@@ -46,11 +48,22 @@ public class EventPresentation {
     }
 
     @GetMapping("getAll")
-    public ResponseEntity<List<EventResponse>> getAllEvents(){
-        var events = listEventsUseCase.execute();
-        var response = events.stream().map(mapper::toResponse).toList();
+    public ResponseEntity<PageResponse<EventResponse>> getAllEvents(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ){
+        var result = listEventsUseCase.execute(new PageRequest(page,size));
+        var events = result.content().stream().map(mapper::toResponse).toList();
+        var response = new PageResponse<>(
+                events,
+                result.page(),
+                result.size(),
+                result.total(),
+                result.totalPages()
+        );
         return ResponseEntity.ok(response);
     }
+
     @Timed(value = "PublishEventEndPoint", description = "it shows how long it takes to give the publish result")
     @PostMapping("publish/{id}")
     @Operation(summary = "Publish an event", description = "Publishes the event identified by its ID.")
