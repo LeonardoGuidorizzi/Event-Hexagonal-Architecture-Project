@@ -49,6 +49,20 @@ private final EventJpaRepository repository;
         );
     }
 
+    @Override
+    public PageResult<Event> findPublishedEvents(String name, PageRequest request) {
+        var pageable =  org.springframework.data.domain.PageRequest.of(
+                request.page(),
+                request.size());
+        var page = repository.findPublishedEvents(name,pageable);
+        return new PageResult<>(
+                page.getContent().stream().map(mapper::toDomain).toList(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+    }
 
 
     @Override

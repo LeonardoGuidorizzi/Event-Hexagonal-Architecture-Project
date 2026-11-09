@@ -1,11 +1,7 @@
 package dev.devdreamer.Event.infrastructure.adapter.in.presentation;
 
 import dev.devdreamer.Event.application.model.PageRequest;
-import dev.devdreamer.Event.application.model.PageResult;
-import dev.devdreamer.Event.application.port.in.CancelEventUseCase;
-import dev.devdreamer.Event.application.port.in.CreateEventUseCase;
-import dev.devdreamer.Event.application.port.in.ListEventsUseCase;
-import dev.devdreamer.Event.application.port.in.PublishEventUseCase;
+import dev.devdreamer.Event.application.port.in.*;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.Mapper.EventMapper;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.CreateEventRequest;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.EventResponse;
@@ -29,13 +25,15 @@ public class EventPresentation {
     private final PublishEventUseCase publishEventUseCase;
     private final CancelEventUseCase cancelEventUseCase;
     private final ListEventsUseCase listEventsUseCase;
+    private final FindPublishedEventsUseCase findPublishedEventsUseCase;
     private final EventMapper mapper;
 
-    public EventPresentation(CreateEventUseCase createEventUseCase,ListEventsUseCase listEventsUseCase, PublishEventUseCase publishEventUseCase,  CancelEventUseCase cancelEventUseCase,  EventMapper mapper ) {
+    public EventPresentation(CreateEventUseCase createEventUseCase, FindPublishedEventsUseCase findPublishedEventsUseCase, ListEventsUseCase listEventsUseCase, PublishEventUseCase publishEventUseCase, CancelEventUseCase cancelEventUseCase, EventMapper mapper ) {
         this.createEventUseCase = createEventUseCase;
         this.publishEventUseCase = publishEventUseCase;
         this.cancelEventUseCase = cancelEventUseCase;
         this.listEventsUseCase = listEventsUseCase;
+        this.findPublishedEventsUseCase = findPublishedEventsUseCase;
         this.mapper = mapper;
     }
 
@@ -48,11 +46,31 @@ public class EventPresentation {
     }
 
     @GetMapping("getAll")
+    @Operation(summary = "Find all events", description = "Shows all events")
     public ResponseEntity<PageResponse<EventResponse>> getAllEvents(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ){
         var result = listEventsUseCase.execute(new PageRequest(page,size));
+        var events = result.content().stream().map(mapper::toResponse).toList();
+        var response = new PageResponse<>(
+                events,
+                result.page(),
+                result.size(),
+                result.total(),
+                result.totalPages()
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("getPublishedEvents")
+    @Operation(summary = "Find the published events", description = "Shows all available events")
+    public ResponseEntity<PageResponse<EventResponse>> getPublishedEvents(
+            @RequestParam String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ){
+        var result = findPublishedEventsUseCase.execute(name,new PageRequest( page, size));
         var events = result.content().stream().map(mapper::toResponse).toList();
         var response = new PageResponse<>(
                 events,
