@@ -1,12 +1,13 @@
 package dev.devdreamer.Event.infrastructure.adapter.out.persistence.converter;
 
+import dev.devdreamer.Event.application.model.PageRequest;
+import dev.devdreamer.Event.application.model.PageResult;
 import dev.devdreamer.Event.application.port.out.EventRepository;
 import dev.devdreamer.Event.domain.Event;
 import dev.devdreamer.Event.infrastructure.adapter.out.persistence.EventJpaRepository;
 import dev.devdreamer.Event.infrastructure.adapter.out.persistence.mapper.EventJpaMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,10 +34,35 @@ private final EventJpaRepository repository;
     }
 
     @Override
-    public List<Event> findAll() {
-        return List.of();
+    public PageResult<Event> findAll(PageRequest request) {
+        var pageable = org.springframework.data.domain.PageRequest.of(
+                request.page(),
+                request.size()
+        );
+        var page = repository.findAll(pageable);
+        return new PageResult<>(
+                page.getContent().stream().map(mapper::toDomain).toList(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
     }
 
+    @Override
+    public PageResult<Event> findPublishedEvents(String name, PageRequest request) {
+        var pageable =  org.springframework.data.domain.PageRequest.of(
+                request.page(),
+                request.size());
+        var page = repository.findPublishedEvents(name,pageable);
+        return new PageResult<>(
+                page.getContent().stream().map(mapper::toDomain).toList(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+    }
 
 
     @Override
