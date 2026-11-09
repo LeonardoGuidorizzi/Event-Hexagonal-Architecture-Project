@@ -34,7 +34,7 @@ private final EventJpaRepository repository;
 
     @Override
     public List<Event> findAll() {
-        return List.of();
+        return repository.findAll().stream().map(mapper::toDomain).toList();
     }
 
 

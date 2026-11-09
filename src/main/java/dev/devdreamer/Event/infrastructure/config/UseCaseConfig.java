@@ -1,8 +1,10 @@
 package dev.devdreamer.Event.infrastructure.config;
 
+import dev.devdreamer.Event.application.port.in.ListEventsUseCase;
 import dev.devdreamer.Event.application.port.out.EventRepository;
 import dev.devdreamer.Event.application.usecases.CancelEventUseCaseImpl;
 import dev.devdreamer.Event.application.usecases.CreateEventUseCaseImpl;
+import dev.devdreamer.Event.application.usecases.ListEventsUseCaseImpl;
 import dev.devdreamer.Event.application.usecases.PublishEventUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,11 @@ public class UseCaseConfig {
     @Bean
     CreateEventUseCaseImpl createEventUseCase(EventRepository repository) {
         return new CreateEventUseCaseImpl(repository);
+    }
+
+    @Bean
+    ListEventsUseCase listEventsUseCase(EventRepository repository) {
+        return new ListEventsUseCaseImpl(repository);
     }
 
     @Bean
