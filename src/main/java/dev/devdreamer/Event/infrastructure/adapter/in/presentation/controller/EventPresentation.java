@@ -25,15 +25,13 @@ public class EventPresentation {
     private final PublishEventUseCase publishEventUseCase;
     private final CancelEventUseCase cancelEventUseCase;
     private final ListEventsUseCase listEventsUseCase;
-    private final FindPublishedEventsUseCase findPublishedEventsUseCase;
     private final EventMapper mapper;
 
-    public EventPresentation(CreateEventUseCase createEventUseCase, FindPublishedEventsUseCase findPublishedEventsUseCase, ListEventsUseCase listEventsUseCase, PublishEventUseCase publishEventUseCase, CancelEventUseCase cancelEventUseCase, EventMapper mapper ) {
+    public EventPresentation(CreateEventUseCase createEventUseCase,  ListEventsUseCase listEventsUseCase, PublishEventUseCase publishEventUseCase, CancelEventUseCase cancelEventUseCase, EventMapper mapper ) {
         this.createEventUseCase = createEventUseCase;
         this.publishEventUseCase = publishEventUseCase;
         this.cancelEventUseCase = cancelEventUseCase;
         this.listEventsUseCase = listEventsUseCase;
-        this.findPublishedEventsUseCase = findPublishedEventsUseCase;
         this.mapper = mapper;
     }
 
