@@ -17,7 +17,6 @@ public interface EventRepository {
 
     PageResult<Event> findAll(String status, String name, PageRequest request);
 
-    PageResult<Event>findPublishedEvents(String name, PageRequest request);
 
     void deleteById(Long id);
 

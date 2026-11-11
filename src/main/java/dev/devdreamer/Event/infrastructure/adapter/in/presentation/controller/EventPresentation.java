@@ -65,24 +65,6 @@ public class EventPresentation {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("getPublishedEvents")
-    @Operation(summary = "Find the published events", description = "Shows all available events")
-    public ResponseEntity<PageResponse<EventResponse>> getPublishedEvents(
-            @RequestParam String name,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
-    ){
-        var result = findPublishedEventsUseCase.execute(name,new PageRequest( page, size));
-        var events = result.content().stream().map(mapper::toResponse).toList();
-        var response = new PageResponse<>(
-                events,
-                result.page(),
-                result.size(),
-                result.total(),
-                result.totalPages()
-        );
-        return ResponseEntity.ok(response);
-    }
 
     @Timed(value = "PublishEventEndPoint", description = "it shows how long it takes to give the publish result")
     @PostMapping("publish/{id}")
