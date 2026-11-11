@@ -2,6 +2,8 @@ package dev.devdreamer.Event.domain;
 
 import dev.devdreamer.Event.domain.enums.EventStatus;
 import dev.devdreamer.Event.domain.enums.EventType;
+import dev.devdreamer.Event.domain.exception.EventCapacityExceededException;
+import dev.devdreamer.Event.domain.exception.InvalidEventStateException;
 
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -92,24 +94,24 @@ public class Event {
     }
     public void publish (){
         if(this.status != EventStatus.DRAFT){
-            throw  new IllegalStateException("Voce não pode publicar um evento se ele não estiver DRAFTADO");
+            throw new InvalidEventStateException("Only draft events can be published");
         }
         this.status = EventStatus.PUBLISHED;
     }
 
     public void cancel (){
     if(this.status == EventStatus.CANCELLED){
-        throw new IllegalArgumentException("Esse Evento já esta cancelado");
+        throw new InvalidEventStateException("Event is already cancelled");
     }
     this.status = EventStatus.CANCELLED;
     }
 
     public void registerParticipant(){
         if(this.status != EventStatus.PUBLISHED){
-            throw new IllegalArgumentException("Inscrições só são permitidas em publicação");
+            throw new InvalidEventStateException("Participants can only register for published events");
         }
-        if(this.registeredCount  > this.capacity ){
-            throw new IllegalArgumentException("Limite excedido, não é possivel adicionar mais participantes");
+        if(this.registeredCount >= this.capacity ){
+            throw new EventCapacityExceededException();
         }
         this.registeredCount ++;
     }
@@ -124,13 +126,13 @@ public class Event {
 
     public static void validate(String name, String description,  String local, String host, Integer capacity, EventType eventType, LocalDateTime start, LocalDateTime end){
      if(name == null || name.isBlank()){
-         throw new IllegalArgumentException("O nome do Evento é obrigatorio");
+         throw new InvalidEventStateException("Event is already cancelled");
      }
      if(description == null || description.isBlank()){
-         throw new IllegalArgumentException("A descrição do Evento é obrigatorio");
+         throw new InvalidEventStateException("Event is already cancelled");
      }
      if(local == null || local.isBlank()){
-         throw new IllegalArgumentException("O local do Evento é obrigatorio");
+         throw new InvalidEventStateException("Event is already cancelled");
      }
      if(host == null || host.isBlank()){
          throw  new IllegalArgumentException("O nome do dono deve ser informado");
@@ -139,10 +141,10 @@ public class Event {
          throw new  IllegalArgumentException("O tipo do Evento deve ser informado");
      }
      if(capacity == null || capacity <= 0){
-         throw new IllegalArgumentException("A capacidade do Evento precisa ser maior que zero");
+         throw new InvalidEventStateException("Event is already cancelled");
      }
-     if(!end.isAfter(start)){
-         throw new IllegalArgumentException("Data de fim deve ser posterior à data de início.");
+     if(start == null || end == null || !end.isAfter(start)){
+         throw new InvalidEventStateException("Event is already cancelled");
      }
     }
 

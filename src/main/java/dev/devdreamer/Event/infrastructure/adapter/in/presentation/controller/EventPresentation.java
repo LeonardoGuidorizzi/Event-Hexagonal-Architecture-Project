@@ -1,8 +1,8 @@
-package dev.devdreamer.Event.infrastructure.adapter.in.presentation;
+package dev.devdreamer.Event.infrastructure.adapter.in.presentation.controller;
 
 import dev.devdreamer.Event.application.model.PageRequest;
 import dev.devdreamer.Event.application.port.in.*;
-import dev.devdreamer.Event.infrastructure.adapter.in.presentation.Mapper.EventMapper;
+import dev.devdreamer.Event.infrastructure.adapter.in.presentation.mapper.EventMapper;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.CreateEventRequest;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.EventResponse;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.PageResponse;
