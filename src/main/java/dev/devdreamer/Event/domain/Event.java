@@ -21,6 +21,7 @@ public class Event {
     EventStatus status;
     LocalDateTime start;
     LocalDateTime end;
+    LocalDateTime cancelledAt;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
@@ -40,6 +41,7 @@ public class Event {
             EventStatus status,
             LocalDateTime start,
             LocalDateTime end,
+            LocalDateTime cancelledAt,
             LocalDateTime createdAt,
             LocalDateTime updatedAt) {
         this.id = id;
@@ -54,6 +56,7 @@ public class Event {
         this.status = status;
         this.start = start;
         this.end = end;
+        this.cancelledAt = cancelledAt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
