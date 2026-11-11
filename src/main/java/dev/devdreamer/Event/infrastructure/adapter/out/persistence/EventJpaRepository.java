@@ -25,14 +25,5 @@ public interface EventJpaRepository extends JpaRepository<EventEntity, UUID> {
             nativeQuery = true)
     Page<EventEntity> findAllFiltered(@Param("status") String status, @Param("name") String name, Pageable pageable);
 
-    @Query(value = """
-        SELECT * FROM tb_event
-        WHERE name = :name AND status = 'PUBLISHED'
-        """,
-            countQuery = """
-        SELECT COUNT(*) FROM tb_event
-        WHERE name = :name AND status = 'PUBLISHED'
-        """,
-            nativeQuery = true)
-    Page<EventEntity> findPublishedEvents(@Param("name") String name, @Param("pageRequest") Pageable pageable);
+
 }

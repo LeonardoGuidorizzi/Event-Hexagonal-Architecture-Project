@@ -19,10 +19,7 @@ public class UseCaseConfig {
     ListEventsUseCase listEventsUseCase(EventRepository repository) {
         return new ListEventsUseCaseImpl(repository);
     }
-    @Bean
-    FindPublishedEventsUseCase findPublishedEventsUseCase (EventRepository repository){
-        return new FindPublishedEventsUseCaseImpl(repository);
-    }
+
 
     @Bean
     PublishEventUseCaseImpl publishEventUseCase(EventRepository repository) {
