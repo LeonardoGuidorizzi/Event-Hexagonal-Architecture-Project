@@ -1,4 +1,4 @@
-package dev.devdreamer.Event.infrastructure.config;
+package dev.devdreamer.Event.infrastructure.adapter.out.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
