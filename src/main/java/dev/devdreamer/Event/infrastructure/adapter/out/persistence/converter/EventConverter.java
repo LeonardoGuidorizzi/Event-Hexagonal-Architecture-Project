@@ -34,12 +34,12 @@ private final EventJpaRepository repository;
     }
 
     @Override
-    public PageResult<Event> findAll(PageRequest request) {
+    public PageResult<Event> findAll(String status, String name, PageRequest request) {
         var pageable = org.springframework.data.domain.PageRequest.of(
                 request.page(),
                 request.size()
         );
-        var page = repository.findAll(pageable);
+        var page = repository.findAllFiltered(status, name, pageable);
         return new PageResult<>(
                 page.getContent().stream().map(mapper::toDomain).toList(),
                 page.getNumber(),

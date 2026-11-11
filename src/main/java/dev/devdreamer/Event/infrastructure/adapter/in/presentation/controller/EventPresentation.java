@@ -48,10 +48,12 @@ public class EventPresentation {
     @GetMapping("getAll")
     @Operation(summary = "Find all events", description = "Shows all events")
     public ResponseEntity<PageResponse<EventResponse>> getAllEvents(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ){
-        var result = listEventsUseCase.execute(new PageRequest(page,size));
+        var result = listEventsUseCase.execute(status, name, new PageRequest(page,size));
         var events = result.content().stream().map(mapper::toResponse).toList();
         var response = new PageResponse<>(
                 events,
