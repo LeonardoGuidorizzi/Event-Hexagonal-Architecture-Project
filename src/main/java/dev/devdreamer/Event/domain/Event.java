@@ -107,6 +107,7 @@ public class Event {
         throw new InvalidEventStateException("Event is already cancelled");
     }
     this.status = EventStatus.CANCELLED;
+    this.cancelledAt = LocalDateTime.now();
     }
 
     public void registerParticipant(){
