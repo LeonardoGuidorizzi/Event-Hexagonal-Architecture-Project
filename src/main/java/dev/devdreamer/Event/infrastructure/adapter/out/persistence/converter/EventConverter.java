@@ -8,6 +8,7 @@ import dev.devdreamer.Event.infrastructure.adapter.out.persistence.EventJpaRepos
 import dev.devdreamer.Event.infrastructure.adapter.out.persistence.mapper.EventJpaMapper;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -64,5 +65,10 @@ private final EventJpaRepository repository;
     @Override
     public Event updateEvent(Long id, Event event) {
         return null;
+    }
+
+    @Override
+    public int deleteCancelledBefore(LocalDateTime cutoff) {
+        return repository.deleteCancelledBefore(cutoff);
     }
 }
