@@ -12,7 +12,7 @@ public class ListEventsUseCaseImpl implements ListEventsUseCase {
         this.repository = repository;
     }
     @Override
-    public PageResult<Event> execute(PageRequest request) {
-        return repository.findAll(request);
+    public PageResult<Event> execute(String status, String name, PageRequest request) {
+        return repository.findAll(status, name, request);
     }
 }

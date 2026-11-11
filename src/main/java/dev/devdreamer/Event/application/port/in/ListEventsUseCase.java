@@ -7,5 +7,5 @@ import dev.devdreamer.Event.domain.Event;
 import java.util.List;
 
 public interface ListEventsUseCase {
-    PageResult<Event> execute(PageRequest request);
+    PageResult<Event> execute(String status, String name, PageRequest request);
 }
