@@ -9,6 +9,7 @@ public record CreateEventRequest(
         @NotBlank(message = "O campo do nome evento é obrigatorio")
         @Size(max = 200, message = "O nome do evento não pode ser maior que 200 caracteres")
         String name,
+        @NotBlank(message = "Event description is required")
         String description,
         @NotBlank(message = "O campo do local do evento é obrigatorio")
         String local,
