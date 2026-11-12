@@ -32,8 +32,11 @@ public interface EventJpaRepository extends JpaRepository<EventEntity, UUID> {
         @Modifying
         @Transactional
         @Query(value = """
-    DELETE FROM tb_event WHERE status = 'CANCELLED' AND cancelled_at IS NOT NULL AND cancelled_at <= (:cutoff)
-    """)
+    DELETE FROM tb_event
+    WHERE status = 'CANCELLED'
+      AND cancelled_at IS NOT NULL
+      AND cancelled_at <= :cutoff
+    """, nativeQuery = true)
     int deleteCancelledBefore(@Param("cutoff") LocalDateTime cutoff);
 
 }
