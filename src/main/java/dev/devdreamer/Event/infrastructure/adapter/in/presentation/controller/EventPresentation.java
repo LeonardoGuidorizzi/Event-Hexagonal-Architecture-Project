@@ -24,16 +24,16 @@ public class EventPresentation {
     private final CreateEventUseCase createEventUseCase;
     private final PublishEventUseCase publishEventUseCase;
     private final CancelEventUseCase cancelEventUseCase;
+    private final DeleteEventUseCase deleteEventUseCase;
     private final ListEventsUseCase listEventsUseCase;
-    private final FindPublishedEventsUseCase findPublishedEventsUseCase;
     private final EventMapper mapper;
 
-    public EventPresentation(CreateEventUseCase createEventUseCase, FindPublishedEventsUseCase findPublishedEventsUseCase, ListEventsUseCase listEventsUseCase, PublishEventUseCase publishEventUseCase, CancelEventUseCase cancelEventUseCase, EventMapper mapper ) {
+    public EventPresentation(CreateEventUseCase createEventUseCase,  ListEventsUseCase listEventsUseCase, PublishEventUseCase publishEventUseCase, CancelEventUseCase cancelEventUseCase, DeleteEventUseCase deleteEventUseCase, EventMapper mapper ) {
         this.createEventUseCase = createEventUseCase;
         this.publishEventUseCase = publishEventUseCase;
         this.cancelEventUseCase = cancelEventUseCase;
+        this.deleteEventUseCase = deleteEventUseCase;
         this.listEventsUseCase = listEventsUseCase;
-        this.findPublishedEventsUseCase = findPublishedEventsUseCase;
         this.mapper = mapper;
     }
 
@@ -79,6 +79,13 @@ public class EventPresentation {
     public ResponseEntity<EventResponse> cancelEvent(@PathVariable String id){
         var event = cancelEventUseCase.execute(id);
         return ResponseEntity.status(HttpStatus.OK).body(mapper.toResponse(event));
+    }
+
+    @DeleteMapping("{id}")
+    @Operation(summary = "Delete an event", description = "Deletes the event identified by its ID.")
+    public ResponseEntity<Void> deleteEvent(@PathVariable String id) {
+        deleteEventUseCase.execute(id);
+        return ResponseEntity.noContent().build();
     }
 
 

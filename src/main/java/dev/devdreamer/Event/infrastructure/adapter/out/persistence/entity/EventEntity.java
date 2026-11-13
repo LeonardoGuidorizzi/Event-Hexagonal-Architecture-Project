@@ -44,6 +44,8 @@ public class EventEntity {
     private LocalDateTime start;
     @Column(name = "ends_at")
     private LocalDateTime end;
+    @Column(name = "cancelled_at")
+    private LocalDateTime cancelledAt;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "updated_at")

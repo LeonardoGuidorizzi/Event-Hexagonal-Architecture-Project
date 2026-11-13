@@ -21,6 +21,7 @@ public class Event {
     EventStatus status;
     LocalDateTime start;
     LocalDateTime end;
+    LocalDateTime cancelledAt;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
@@ -40,6 +41,7 @@ public class Event {
             EventStatus status,
             LocalDateTime start,
             LocalDateTime end,
+            LocalDateTime cancelledAt,
             LocalDateTime createdAt,
             LocalDateTime updatedAt) {
         this.id = id;
@@ -54,6 +56,7 @@ public class Event {
         this.status = status;
         this.start = start;
         this.end = end;
+        this.cancelledAt = cancelledAt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -104,6 +107,7 @@ public class Event {
         throw new InvalidEventStateException("Event is already cancelled");
     }
     this.status = EventStatus.CANCELLED;
+    this.cancelledAt = LocalDateTime.now();
     }
 
     public void registerParticipant(){
@@ -126,25 +130,25 @@ public class Event {
 
     public static void validate(String name, String description,  String local, String host, Integer capacity, EventType eventType, LocalDateTime start, LocalDateTime end){
      if(name == null || name.isBlank()){
-         throw new InvalidEventStateException("Event is already cancelled");
+         throw new IllegalArgumentException("Event name is required");
      }
      if(description == null || description.isBlank()){
-         throw new InvalidEventStateException("Event is already cancelled");
+         throw new IllegalArgumentException("Event description is required");
      }
      if(local == null || local.isBlank()){
-         throw new InvalidEventStateException("Event is already cancelled");
+         throw new IllegalArgumentException("Event location is required");
      }
      if(host == null || host.isBlank()){
-         throw  new IllegalArgumentException("O nome do dono deve ser informado");
+         throw new IllegalArgumentException("Event host is required");
      }
      if(eventType == null){
          throw new  IllegalArgumentException("O tipo do Evento deve ser informado");
      }
      if(capacity == null || capacity <= 0){
-         throw new InvalidEventStateException("Event is already cancelled");
+         throw new IllegalArgumentException("Event capacity must be positive");
      }
      if(start == null || end == null || !end.isAfter(start)){
-         throw new InvalidEventStateException("Event is already cancelled");
+         throw new IllegalArgumentException("Event end must be after event start");
      }
     }
 
@@ -201,6 +205,10 @@ public class Event {
         return end;
     }
 
+    public LocalDateTime getCancelledAt() {
+        return cancelledAt;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -255,6 +263,10 @@ public class Event {
 
     public void setEnd(LocalDateTime end) {
         this.end = end;
+    }
+
+    public void setCancelledAt(LocalDateTime cancelledAt) {
+        this.cancelledAt = cancelledAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
