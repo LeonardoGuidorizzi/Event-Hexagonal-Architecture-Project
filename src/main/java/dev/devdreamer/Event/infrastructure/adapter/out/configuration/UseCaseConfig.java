@@ -50,4 +50,9 @@ public class UseCaseConfig {
     DeleteEventUseCaseImpl deleteEventUseCase(EventRepository repository) {
         return new DeleteEventUseCaseImpl(repository);
     }
+
+    @Bean
+    UpdateEventUseCaseImpl updateEventUseCase(EventRepository repository) {
+        return new UpdateEventUseCaseImpl(repository);
+    }
 }
