@@ -19,7 +19,7 @@ public interface EventRepository {
     PageResult<Event> findAll(String status, String name, PageRequest request);
 
 
-    void deleteById(Long id);
+    void deleteById(String id);
 
     Event updateEvent(Long id, Event event);
 

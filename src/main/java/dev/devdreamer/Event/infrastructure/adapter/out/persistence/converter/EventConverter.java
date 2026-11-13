@@ -58,8 +58,8 @@ private final EventJpaRepository repository;
     }
 
     @Override
-    public void deleteById(Long id) {
-
+    public void deleteById(String id) {
+        repository.deleteById(UUID.fromString(id));
     }
 
     @Override

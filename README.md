@@ -40,6 +40,7 @@ When the application is running locally:
 | `POST` | `/api/v1/create` | Create an event | `201 Created` with the event |
 | `POST` | `/api/v1/publish/{id}` | Publish an event by ID | `200 OK` with the updated event |
 | `POST` | `/api/v1/cancel/{id}` | Cancel an event by ID | `200 OK` with the updated event |
+| `DELETE` | `/api/v1/{id}` | Delete an event by ID | `204 No Content` |
 
 Create request example:
 
