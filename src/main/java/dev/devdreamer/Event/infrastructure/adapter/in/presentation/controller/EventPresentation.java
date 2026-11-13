@@ -25,14 +25,16 @@ public class EventPresentation {
     private final PublishEventUseCase publishEventUseCase;
     private final CancelEventUseCase cancelEventUseCase;
     private final DeleteEventUseCase deleteEventUseCase;
+    private final UpdateEventUseCase updateEventUseCase;
     private final ListEventsUseCase listEventsUseCase;
     private final EventMapper mapper;
 
-    public EventPresentation(CreateEventUseCase createEventUseCase,  ListEventsUseCase listEventsUseCase, PublishEventUseCase publishEventUseCase, CancelEventUseCase cancelEventUseCase, DeleteEventUseCase deleteEventUseCase, EventMapper mapper ) {
+    public EventPresentation(CreateEventUseCase createEventUseCase, ListEventsUseCase listEventsUseCase, PublishEventUseCase publishEventUseCase, CancelEventUseCase cancelEventUseCase, DeleteEventUseCase deleteEventUseCase, UpdateEventUseCase updateEventUseCase, EventMapper mapper) {
         this.createEventUseCase = createEventUseCase;
         this.publishEventUseCase = publishEventUseCase;
         this.cancelEventUseCase = cancelEventUseCase;
         this.deleteEventUseCase = deleteEventUseCase;
+        this.updateEventUseCase = updateEventUseCase;
         this.listEventsUseCase = listEventsUseCase;
         this.mapper = mapper;
     }
@@ -86,6 +88,16 @@ public class EventPresentation {
     public ResponseEntity<Void> deleteEvent(@PathVariable String id) {
         deleteEventUseCase.execute(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("{id}")
+    @Operation(summary = "Update an event", description = "Updates an event while it is in draft status.")
+    public ResponseEntity<EventResponse> updateEvent(
+            @PathVariable String id,
+            @Valid @RequestBody CreateEventRequest request
+    ) {
+        var event = updateEventUseCase.execute(id, mapper.toUpdateCommand(request));
+        return ResponseEntity.ok(mapper.toResponse(event));
     }
 
 

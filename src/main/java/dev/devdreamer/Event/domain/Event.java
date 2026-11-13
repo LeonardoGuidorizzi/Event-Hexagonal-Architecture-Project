@@ -102,6 +102,34 @@ public class Event {
         this.status = EventStatus.PUBLISHED;
     }
 
+    public void updateDetails(
+            String name,
+            String description,
+            String local,
+            String host,
+            Integer capacity,
+            EventType eventType,
+            LocalDateTime start,
+            LocalDateTime end
+    ) {
+        if (this.status != EventStatus.DRAFT) {
+            throw new InvalidEventStateException("Only draft events can be updated");
+        }
+        validate(name, description, local, host, capacity, eventType, start, end);
+        if (capacity < this.registeredCount) {
+            throw new IllegalArgumentException("Event capacity cannot be lower than the registered participant count");
+        }
+
+        this.name = name;
+        this.description = description;
+        this.local = local;
+        this.host = host;
+        this.capacity = capacity;
+        this.eventType = eventType;
+        this.start = start;
+        this.end = end;
+    }
+
     public void cancel (){
     if(this.status == EventStatus.CANCELLED){
         throw new InvalidEventStateException("Event is already cancelled");

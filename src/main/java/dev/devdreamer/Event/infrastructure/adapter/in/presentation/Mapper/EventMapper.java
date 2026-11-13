@@ -1,6 +1,7 @@
 package dev.devdreamer.Event.infrastructure.adapter.in.presentation.mapper;
 
 import dev.devdreamer.Event.application.port.in.CreateEventUseCase.CreateEventCommand;
+import dev.devdreamer.Event.application.port.in.UpdateEventUseCase.UpdateEventCommand;
 import dev.devdreamer.Event.domain.Event;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.CreateEventRequest;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.EventResponse;
@@ -10,6 +11,11 @@ import org.springframework.stereotype.Component;
 public class EventMapper {
     public CreateEventCommand toCommand(CreateEventRequest request) {
         return new CreateEventCommand(request.name(), request.description(), request.local(), request.host(),
+                request.capacity(), request.eventType(), request.start(), request.end());
+    }
+
+    public UpdateEventCommand toUpdateCommand(CreateEventRequest request) {
+        return new UpdateEventCommand(request.name(), request.description(), request.local(), request.host(),
                 request.capacity(), request.eventType(), request.start(), request.end());
     }
 
