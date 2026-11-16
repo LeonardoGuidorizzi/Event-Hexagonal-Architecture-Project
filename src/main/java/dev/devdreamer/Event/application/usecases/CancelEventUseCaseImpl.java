@@ -4,10 +4,8 @@ import dev.devdreamer.Event.application.port.in.CancelEventUseCase;
 import dev.devdreamer.Event.application.port.out.EventRepository;
 import dev.devdreamer.Event.domain.Event;
 import dev.devdreamer.Event.domain.exception.EventNotFoundException;
-import jakarta.transaction.Transactional;
 
 
-@Transactional
 public class CancelEventUseCaseImpl implements CancelEventUseCase {
     final EventRepository repository;
 

@@ -3,9 +3,7 @@ package dev.devdreamer.Event.application.usecases;
 import dev.devdreamer.Event.application.port.in.CreateEventUseCase;
 import dev.devdreamer.Event.application.port.out.EventRepository;
 import dev.devdreamer.Event.domain.Event;
-import jakarta.transaction.Transactional;
 
-@Transactional
 public class CreateEventUseCaseImpl implements CreateEventUseCase {
     private final EventRepository repository;
 

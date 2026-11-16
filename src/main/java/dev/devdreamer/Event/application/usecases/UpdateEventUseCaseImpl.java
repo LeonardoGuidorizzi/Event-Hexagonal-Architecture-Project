@@ -4,9 +4,7 @@ import dev.devdreamer.Event.application.port.in.UpdateEventUseCase;
 import dev.devdreamer.Event.application.port.out.EventRepository;
 import dev.devdreamer.Event.domain.Event;
 import dev.devdreamer.Event.domain.exception.EventNotFoundException;
-import jakarta.transaction.Transactional;
 
-@Transactional
 public class UpdateEventUseCaseImpl implements UpdateEventUseCase {
     private final EventRepository repository;
 
