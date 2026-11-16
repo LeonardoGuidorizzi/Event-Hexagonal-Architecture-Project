@@ -138,9 +138,12 @@ public class Event {
     this.cancelledAt = LocalDateTime.now();
     }
 
-    public void registerParticipant(){
+    public void signUpParticipant(LocalDateTime now) {
         if(this.status != EventStatus.PUBLISHED){
-            throw new InvalidEventStateException("Participants can only register for published events");
+            throw new InvalidEventStateException("Participants can only sign up for published events");
+        }
+        if (this.end == null || !this.end.isAfter(now)) {
+            throw new InvalidEventStateException("Users cannot sign up for an event that has already taken place");
         }
         if(this.registeredCount >= this.capacity ){
             throw new EventCapacityExceededException();
