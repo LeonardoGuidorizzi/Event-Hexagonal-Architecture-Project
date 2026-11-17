@@ -5,7 +5,7 @@ A REST API for creating, publishing, and canceling events. The project uses a he
 ## Technologies
 
 - Java 21
-- Spring Boot 4.0.3 (Web MVC, Data JPA, Validation, Actuator)
+- Spring Boot 4.0.3 (Web MVC, Data JPA, Validation, Actuator, Security, OAuth 2.0 Resource Server)
 - PostgreSQL
 - Flyway for database migrations
 - MapStruct for mapping between domain and persistence models
@@ -40,8 +40,14 @@ When the application is running locally:
 | `POST` | `/api/v1/create` | Create an event | `201 Created` with the event |
 | `POST` | `/api/v1/publish/{id}` | Publish an event by ID | `200 OK` with the updated event |
 | `POST` | `/api/v1/cancel/{id}` | Cancel an event by ID | `200 OK` with the updated event |
+| `POST` | `/api/v1/{id}/sign-up` | Sign up for a published event | `200 OK` with the updated event |
 | `PUT` | `/api/v1/{id}` | Update a draft event by ID | `200 OK` with the updated event |
 | `DELETE` | `/api/v1/{id}` | Delete an event by ID | `204 No Content` |
+| `POST` | `/api/v1/auth/signup` | Create a user and account | `201 Created` with an access token |
+| `POST` | `/api/v1/auth/login` | Log in | `200 OK` with an access token |
+| `POST` | `/api/v1/auth/logout` | Revoke the current access token | `200 OK` |
+
+Auth signup accepts `name`, `lastname`, `birthdate`, `email`, and `password`. `Account` stores the profile fields and `User` stores the login credentials. Auth signup and login routes are public; other routes require `Authorization: Bearer <accessToken>`. Event signup is limited to published events that have not ended, rejects duplicate participation, and tracks participation per user. Passwords use BCrypt and access tokens expire after 15 minutes. Configure `JWT_SECRET_BASE64` with a Base64 encoded random key of at least 32 bytes (for example, `openssl rand -base64 32`).
 
 Create request example:
 
@@ -66,6 +72,8 @@ The `name`, `local`, `host`, `capacity`, `eventType`, `start`, and `end` fields 
 - **Framework independent domain:** event rules and state transitions live in the domain model, without Spring, HTTP, or JPA annotations. Infrastructure persistence entities are mapped to and from the domain model.
 - **HTTP boundary models:** the presentation adapter accepts and returns DTOs and maps them to application/domain types, keeping transport details out of the core.
 - **Database evolution:** Flyway versioned SQL migrations define the schema, while Spring Data JPA provides persistence access.
+- **Cancelled event cleanup:** Cancellation records a timestamp, and a scheduled cleanup job removes cancelled events after a two-minute retention period. The cleanup uses a database-side delete filtered by status and cutoff, so it removes only eligible rows and does not load them into application memory.
+- **Authentication and authorization:** Spring Security's OAuth 2.0 Resource Server validates signed JWT bearer tokens and protects event routes. Signup and login issue short-lived tokens; BCrypt hashes passwords, while logout revokes the token ID until expiry so a logged-out token cannot be reused.
 - **API contract:** Springdoc generates the OpenAPI description and Swagger UI from the presentation endpoints and their documentation annotations.
 - **Observability:** Actuator and Micrometer expose application metrics, with a Datadog registry available for export.
 

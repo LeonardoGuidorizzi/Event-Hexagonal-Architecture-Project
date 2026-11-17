@@ -3,9 +3,7 @@ package dev.devdreamer.Event.application.usecases;
 import dev.devdreamer.Event.application.port.in.DeleteEventUseCase;
 import dev.devdreamer.Event.application.port.out.EventRepository;
 import dev.devdreamer.Event.domain.exception.EventNotFoundException;
-import jakarta.transaction.Transactional;
 
-@Transactional
 public class DeleteEventUseCaseImpl implements DeleteEventUseCase {
     private final EventRepository repository;
 

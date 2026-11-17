@@ -34,6 +34,11 @@ public class EventPersistenceAdapter implements EventRepository {
     }
 
     @Override
+    public Optional<Event> findEventByIdForUpdate(String id) {
+        return repository.findByIdForUpdate(UUID.fromString(id)).map(mapper::toDomain);
+    }
+
+    @Override
     public PageResult<Event> findAll(String status, String name, PageRequest request) {
         var pageable = org.springframework.data.domain.PageRequest.of(request.page(), request.size());
         var page = repository.findAllFiltered(status, name, pageable);

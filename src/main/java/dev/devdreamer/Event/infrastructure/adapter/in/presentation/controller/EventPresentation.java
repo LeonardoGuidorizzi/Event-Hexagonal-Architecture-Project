@@ -13,6 +13,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -27,15 +29,17 @@ public class EventPresentation {
     private final DeleteEventUseCase deleteEventUseCase;
     private final UpdateEventUseCase updateEventUseCase;
     private final ListEventsUseCase listEventsUseCase;
+    private final SignUpForEventUseCase signUpForEventUseCase;
     private final EventMapper mapper;
 
-    public EventPresentation(CreateEventUseCase createEventUseCase, ListEventsUseCase listEventsUseCase, PublishEventUseCase publishEventUseCase, CancelEventUseCase cancelEventUseCase, DeleteEventUseCase deleteEventUseCase, UpdateEventUseCase updateEventUseCase, EventMapper mapper) {
+    public EventPresentation(CreateEventUseCase createEventUseCase, ListEventsUseCase listEventsUseCase, PublishEventUseCase publishEventUseCase, CancelEventUseCase cancelEventUseCase, DeleteEventUseCase deleteEventUseCase, UpdateEventUseCase updateEventUseCase, SignUpForEventUseCase signUpForEventUseCase, EventMapper mapper) {
         this.createEventUseCase = createEventUseCase;
         this.publishEventUseCase = publishEventUseCase;
         this.cancelEventUseCase = cancelEventUseCase;
         this.deleteEventUseCase = deleteEventUseCase;
         this.updateEventUseCase = updateEventUseCase;
         this.listEventsUseCase = listEventsUseCase;
+        this.signUpForEventUseCase = signUpForEventUseCase;
         this.mapper = mapper;
     }
 
@@ -97,6 +101,14 @@ public class EventPresentation {
             @Valid @RequestBody CreateEventRequest request
     ) {
         var event = updateEventUseCase.execute(id, mapper.toUpdateCommand(request));
+        return ResponseEntity.ok(mapper.toResponse(event));
+    }
+
+    @PostMapping("{id}/sign-up")
+    @Transactional
+    @Operation(summary = "Sign up for an event")
+    public ResponseEntity<EventResponse> signUpForEvent(@PathVariable String id, JwtAuthenticationToken authentication) {
+        var event = signUpForEventUseCase.execute(id, authentication.getToken().getSubject());
         return ResponseEntity.ok(mapper.toResponse(event));
     }
 

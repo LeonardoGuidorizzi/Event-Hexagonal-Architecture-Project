@@ -4,6 +4,10 @@ import dev.devdreamer.Event.domain.exception.EventCapacityExceededException;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.ApiError;
 import dev.devdreamer.Event.domain.exception.EventNotFoundException;
 import dev.devdreamer.Event.domain.exception.InvalidEventStateException;
+import dev.devdreamer.Event.domain.exception.EmailAlreadyRegisteredException;
+import dev.devdreamer.Event.domain.exception.InvalidCredentialsException;
+import dev.devdreamer.Event.domain.exception.DuplicateEventSignUpException;
+import org.springframework.dao.DataIntegrityViolationException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +22,16 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler({EmailAlreadyRegisteredException.class, DuplicateEventSignUpException.class, DataIntegrityViolationException.class})
+    public ResponseEntity<ApiError> handleDataConflict(RuntimeException exception) {
+        return error(HttpStatus.CONFLICT, exception.getMessage(), Map.of());
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ApiError> handleInvalidCredentials(InvalidCredentialsException exception) {
+        return error(HttpStatus.UNAUTHORIZED, exception.getMessage(), Map.of());
+    }
+
     @ExceptionHandler(EventNotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(EventNotFoundException exception) {
         return error(HttpStatus.NOT_FOUND, exception.getMessage(), Map.of());
