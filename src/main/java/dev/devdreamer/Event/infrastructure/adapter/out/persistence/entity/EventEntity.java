@@ -3,53 +3,49 @@ package dev.devdreamer.Event.infrastructure.adapter.out.persistence.entity;
 import dev.devdreamer.Event.domain.enums.EventStatus;
 import dev.devdreamer.Event.domain.enums.EventType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "tb_event")
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 public class EventEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false, updatable = false)
-    private UUID id;
+    public UUID id;
     @Column(length = 255, nullable = false)
-    private String name;
+    public String name;
     @Column(length = 255, nullable = false)
-    private String description;
+    public String description;
     @Column(length = 255, nullable = false)
-    private String identifier;
+    public String identifier;
     @Column(length = 255, nullable = false)
-    private String local;
+    public String local;
     @Column(length = 255, nullable = false)
-    private String host;
+    public String host;
     @Column(nullable = false)
-    private Integer capacity;
+    public Integer capacity;
     @Column(name = "registered_count", nullable = false)
-    private Integer registeredCount;
+    public Integer registeredCount;
     @Enumerated(EnumType.STRING)
     @Column(name = "event_type")
-    private EventType eventType;
+    public EventType eventType;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EventStatus status;
+    public EventStatus status;
     @Column(name = "starts_at")
-    private LocalDateTime start;
+    public LocalDateTime start;
     @Column(name = "ends_at")
-    private LocalDateTime end;
+    public LocalDateTime end;
     @Column(name = "cancelled_at")
-    private LocalDateTime cancelledAt;
+    public LocalDateTime cancelledAt;
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    public LocalDateTime createdAt;
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    public LocalDateTime updatedAt;
+
+    public EventEntity() {}
 
     @PrePersist
     public void prePersist() {
