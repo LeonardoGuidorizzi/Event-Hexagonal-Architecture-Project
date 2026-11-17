@@ -11,6 +11,8 @@ public interface EventRepository {
 
     Optional<Event> findEventById(String id);
 
+    Optional<Event> findEventByIdForUpdate(String id);
+
     PageResult<Event> findAll(String status, String name, PageRequest request);
 
 
