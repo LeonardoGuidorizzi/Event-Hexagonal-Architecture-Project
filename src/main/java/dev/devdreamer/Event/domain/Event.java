@@ -173,7 +173,7 @@ public class Event {
          throw new IllegalArgumentException("Event host is required");
      }
      if(eventType == null){
-         throw new  IllegalArgumentException("O tipo do Evento deve ser informado");
+         throw new  IllegalArgumentException("The event type is required");
      }
      if(capacity == null || capacity <= 0){
          throw new IllegalArgumentException("Event capacity must be positive");
