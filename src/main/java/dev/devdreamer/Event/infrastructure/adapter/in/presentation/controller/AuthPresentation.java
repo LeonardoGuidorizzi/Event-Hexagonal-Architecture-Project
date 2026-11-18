@@ -5,6 +5,7 @@ import dev.devdreamer.Event.application.port.in.LogoutUseCase;
 import dev.devdreamer.Event.application.port.in.SignUpUseCase;
 import dev.devdreamer.Event.infrastructure.adapter.in.presentation.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/auth")
+@Tag(name = "Auth")
 public class AuthPresentation {
     private final SignUpUseCase signUpUseCase;
     private final LoginUseCase loginUseCase;
