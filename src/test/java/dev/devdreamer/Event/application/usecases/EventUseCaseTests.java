@@ -11,6 +11,7 @@ import dev.devdreamer.Event.domain.User;
 import dev.devdreamer.Event.domain.enums.EventStatus;
 import dev.devdreamer.Event.domain.enums.EventType;
 import dev.devdreamer.Event.domain.exception.DuplicateEventSignUpException;
+import dev.devdreamer.Event.domain.exception.EventCapacityExceededException;
 import dev.devdreamer.Event.domain.exception.EventNotFoundException;
 import dev.devdreamer.Event.domain.exception.InvalidEventStateException;
 import org.junit.jupiter.api.Test;
@@ -51,6 +52,18 @@ class EventUseCaseTests {
 
         assertThrows(IllegalArgumentException.class, () -> useCase.execute(new CreateEventUseCase.CreateEventCommand(
                 " ", "Description", "Place", "Host", 10, EventType.MUSIC, START, END)));
+        assertTrue(events.saved.isEmpty());
+    }
+
+    @Test
+    void createEventRejectsZeroCapacityAndEndEqualToStartWithoutSaving() {
+        FakeEvents events = new FakeEvents();
+        CreateEventUseCase useCase = new CreateEventUseCaseImpl(events);
+
+        assertThrows(IllegalArgumentException.class, () -> useCase.execute(new CreateEventUseCase.CreateEventCommand(
+                "Meetup", "Description", "Place", "Host", 0, EventType.MUSIC, START, END)));
+        assertThrows(IllegalArgumentException.class, () -> useCase.execute(new CreateEventUseCase.CreateEventCommand(
+                "Meetup", "Description", "Place", "Host", 10, EventType.MUSIC, START, START)));
         assertTrue(events.saved.isEmpty());
     }
 
@@ -195,6 +208,46 @@ class EventUseCaseTests {
         assertThrows(InvalidEventStateException.class, () -> new SignUpForEventUseCaseImpl(draftEvent, users, participants, CLOCK)
                 .execute("event-1", "person@example.com"));
         assertTrue(participants.savedEventIds.isEmpty());
+    }
+
+    @Test
+    void signUpForEventRejectsFullEventWithoutSavingParticipantOrEvent() {
+        FakeEvents events = new FakeEvents();
+        events.existing = Event.create("Full", "Description", "Place", "Host", 1,
+                START, END, EventType.MUSIC);
+        events.existing.publish();
+        events.existing.setRegisteredCount(1);
+        FakeUsers users = new FakeUsers();
+        users.existing = new User(UUID.randomUUID(), "person@example.com", "hash", null);
+        FakeParticipants participants = new FakeParticipants();
+
+        assertThrows(EventCapacityExceededException.class,
+                () -> new SignUpForEventUseCaseImpl(events, users, participants, CLOCK)
+                        .execute("event-1", "person@example.com"));
+
+        assertTrue(participants.savedEventIds.isEmpty());
+        assertTrue(events.saved.isEmpty());
+        assertEquals(1, events.existing.getRegisteredCount());
+    }
+
+    @Test
+    void signUpForEventRejectsAtEventEndWithoutSavingParticipantOrEvent() {
+        LocalDateTime now = LocalDateTime.of(2030, 4, 1, 12, 0);
+        Clock clockAtEnd = Clock.fixed(now.toInstant(ZoneOffset.UTC), ZoneOffset.UTC);
+        FakeEvents events = new FakeEvents();
+        events.existing = Event.create("Ending", "Description", "Place", "Host", 5,
+                now.minusHours(2), now, EventType.MUSIC);
+        events.existing.publish();
+        FakeUsers users = new FakeUsers();
+        users.existing = new User(UUID.randomUUID(), "person@example.com", "hash", null);
+        FakeParticipants participants = new FakeParticipants();
+
+        assertThrows(InvalidEventStateException.class, () -> new SignUpForEventUseCaseImpl(events, users, participants, clockAtEnd)
+                .execute("event-1", "person@example.com"));
+
+        assertTrue(participants.savedEventIds.isEmpty());
+        assertTrue(events.saved.isEmpty());
+        assertEquals(0, events.existing.getRegisteredCount());
     }
 
     @Test
