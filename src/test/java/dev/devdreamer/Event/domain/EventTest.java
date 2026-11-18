@@ -37,8 +37,21 @@ class EventTest {
         assertThrows(IllegalArgumentException.class, () -> Event.create(null, "Description", "Place", "Host", 1, START, END, EventType.MUSIC));
         assertThrows(IllegalArgumentException.class, () -> Event.create("Name", " ", "Place", "Host", 1, START, END, EventType.MUSIC));
         assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 0, START, END, EventType.MUSIC));
+        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", -1, START, END, EventType.MUSIC));
         assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, START, END, null));
+        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, null, END, EventType.MUSIC));
+        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, START, null, EventType.MUSIC));
         assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, START, START, EventType.MUSIC));
+        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, END, START, EventType.MUSIC));
+    }
+
+    @Test
+    void generatedIdentifiersStayWithinFiveDigitRange() {
+        for (int attempt = 0; attempt < 100; attempt++) {
+            int identifier = Integer.parseInt(Event.generateIdentifier());
+            assertTrue(identifier >= 10_000);
+            assertTrue(identifier <= 19_999);
+        }
     }
 
     @Test
@@ -84,6 +97,18 @@ class EventTest {
     }
 
     @Test
+    void updateDetailsAllowsCapacityEqualToCurrentRegistrationCount() {
+        Event event = newEvent();
+        event.setRegisteredCount(3);
+
+        assertDoesNotThrow(() -> event.updateDetails(
+                "Updated", "Description", "Place", "Host", 3, EventType.MUSIC, START, END));
+        assertEquals(3, event.getCapacity());
+        assertFalse(event.hasAvailableSlots());
+        assertEquals(0, event.availableSlots());
+    }
+
+    @Test
     void cancelSetsCancelledStatusAndTimestampAndRejectsRepeatCancellation() {
         Event event = newEvent();
 
@@ -107,6 +132,21 @@ class EventTest {
     }
 
     @Test
+    void signupAtOneSlotCapacityFillsEventAndCannotExceedCapacity() {
+        Event event = Event.create("Small event", "Description", "Place", "Host", 1,
+                START, END, EventType.MUSIC);
+        event.publish();
+
+        event.signUpParticipant(START.minusNanos(1));
+
+        assertEquals(1, event.getRegisteredCount());
+        assertFalse(event.hasAvailableSlots());
+        assertEquals(0, event.availableSlots());
+        assertThrows(EventCapacityExceededException.class, () -> event.signUpParticipant(START));
+        assertEquals(1, event.getRegisteredCount());
+    }
+
+    @Test
     void signupRejectsUnpublishedPastAndFullEvents() {
         Event draft = newEvent();
         assertThrows(InvalidEventStateException.class, () -> draft.signUpParticipant(START.minusHours(1)));
@@ -114,6 +154,11 @@ class EventTest {
         Event ended = newEvent();
         ended.publish();
         assertThrows(InvalidEventStateException.class, () -> ended.signUpParticipant(END));
+
+        Event endingSoon = newEvent();
+        endingSoon.publish();
+        assertDoesNotThrow(() -> endingSoon.signUpParticipant(END.minusNanos(1)));
+        assertEquals(1, endingSoon.getRegisteredCount());
 
         Event full = newEvent();
         full.publish();
