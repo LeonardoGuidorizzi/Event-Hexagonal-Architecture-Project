@@ -6,25 +6,25 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public record CreateEventRequest(
-        @NotBlank(message = "O campo do nome evento é obrigatorio")
-        @Size(max = 200, message = "O nome do evento não pode ser maior que 200 caracteres")
+        @NotBlank(message = "Event name is required")
+        @Size(max = 200, message = "Event name must not exceed 200 characters")
         String name,
         @NotBlank(message = "Event description is required")
         String description,
-        @NotBlank(message = "O campo do local do evento é obrigatorio")
+        @NotBlank(message = "Event location is required")
         String local,
-        @NotBlank(message = "O campo de responsavel pelo evento é obrigatorio")
-        @Size(max = 200, message = "O nome do responsavel não pode ser maior que 200 caracteres")
+        @NotBlank(message = "Event host is required")
+        @Size(max = 200, message = "Event host must not exceed 200 characters")
         String host,
-        @NotNull(message = "O campo de capacidade do evento é obrigatorio")
-        @Positive(message = "Capacidade deve ser positiva")
+        @NotNull(message = "Event capacity is required")
+        @Positive(message = "Event capacity must be positive")
         Integer capacity,
-        @NotNull(message = "O campo de Tipo do evento é obrigatorio")
+        @NotNull(message = "Event type is required")
         EventType eventType,
-        @NotNull(message = "O campo de data de inicio do evento é obrigatorio")
-        @Future(message = "Data de início deve ser no futuro")
+        @NotNull(message = "Event start date is required")
+        @Future(message = "Event start date must be in the future")
         LocalDateTime start,
-        @NotNull(message = "O campo de data de fim do evento é obrigatorio")
+        @NotNull(message = "Event end date is required")
         LocalDateTime end
 
 
