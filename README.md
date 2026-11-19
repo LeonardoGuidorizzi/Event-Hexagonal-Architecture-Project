@@ -8,7 +8,6 @@ A REST API for creating, publishing, and canceling events. The project uses a he
 - Spring Boot 4.0.3 (Web MVC, Data JPA, Validation, Actuator, Security, OAuth 2.0 Resource Server)
 - PostgreSQL
 - Flyway for database migrations
-- MapStruct for mapping between domain and persistence models
 - Springdoc OpenAPI 3.2.0 and Swagger UI
 - Micrometer with the Datadog metrics registry
 - Maven
