@@ -36,12 +36,12 @@ When the application is running locally:
 
 | Method | Route | Description | Success response |
 | --- | --- | --- | --- |
-| `POST` | `/api/v1/create` | Create an event | `201 Created` with the event |
-| `POST` | `/api/v1/publish/{id}` | Publish an event by ID | `200 OK` with the updated event |
-| `POST` | `/api/v1/cancel/{id}` | Cancel an event by ID | `200 OK` with the updated event |
-| `POST` | `/api/v1/{id}/sign-up` | Sign up for a published event | `200 OK` with the updated event |
-| `PUT` | `/api/v1/{id}` | Update a draft event by ID | `200 OK` with the updated event |
-| `DELETE` | `/api/v1/{id}` | Delete an event by ID | `204 No Content` |
+| `POST` | `/api/v1/event` | Create an event | `201 Created` with the event |
+| `POST` | `/api/v1/event/publish/{id}` | Publish an event by ID | `200 OK` with the updated event |
+| `POST` | `/api/v1/event/cancel/{id}` | Cancel an event by ID | `200 OK` with the updated event |
+| `POST` | `/api/v1/event/{id}/sign-up` | Sign up for a published event | `200 OK` with the updated event |
+| `PUT` | `/api/v1/event/{id}` | Update a draft event by ID | `200 OK` with the updated event |
+| `DELETE` | `/api/v1/event/{id}` | Delete an event by ID | `204 No Content` |
 | `POST` | `/api/v1/auth/signup` | Create a user and account | `201 Created` with an access token |
 | `POST` | `/api/v1/auth/login` | Log in | `200 OK` with an access token |
 | `POST` | `/api/v1/auth/logout` | Revoke the current access token | `200 OK` |
