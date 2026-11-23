@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Controller
-@RequestMapping("api/v1/")
+@RequestMapping("api/v1/event")
 @Tag(name = "Events", description = "Create and manage events")
 public class EventPresentation {
 
@@ -43,7 +43,7 @@ public class EventPresentation {
         this.mapper = mapper;
     }
 
-    @PostMapping("create")
+    @PostMapping()
     @Operation(summary = "Create an event", description = "Creates an event using the supplied details.")
     public ResponseEntity<EventResponse> createEvent (@Valid @RequestBody CreateEventRequest request){
         var command = mapper.toCommand(request);
