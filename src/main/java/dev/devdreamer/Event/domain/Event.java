@@ -7,6 +7,8 @@ import dev.devdreamer.Event.domain.exception.InvalidEventStateException;
 
 import java.time.LocalDateTime;
 import java.util.Random;
+import java.util.UUID;
+import dev.devdreamer.Event.domain.exception.EventAccessDeniedException;
 
 public class Event {
     String id;
@@ -24,6 +26,7 @@ public class Event {
     LocalDateTime cancelledAt;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+    UUID creatorId;
 
     public Event() {
     }
@@ -44,6 +47,14 @@ public class Event {
             LocalDateTime cancelledAt,
             LocalDateTime createdAt,
             LocalDateTime updatedAt) {
+        this(id, name, description, identifier, local, host, registeredCount, capacity, eventType, status,
+                start, end, cancelledAt, createdAt, updatedAt, null);
+    }
+
+    public Event(String id, String name, String description, String identifier, String local, String host,
+            Integer registeredCount, Integer capacity, EventType eventType, EventStatus status,
+            LocalDateTime start, LocalDateTime end, LocalDateTime cancelledAt, LocalDateTime createdAt,
+            LocalDateTime updatedAt, UUID creatorId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -59,18 +70,11 @@ public class Event {
         this.cancelledAt = cancelledAt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.creatorId = creatorId;
     }
 
-    public static Event create(
-            String name,
-            String description,
-            String local,
-            String host,
-            Integer capacity,
-            LocalDateTime start,
-            LocalDateTime end,
-            EventType eventType
-            ){
+    public static Event create(String name, String description, String local, String host, Integer capacity,
+            LocalDateTime start, LocalDateTime end, EventType eventType, UUID creatorId) {
         validate(
                 name,
                 description,
@@ -80,6 +84,9 @@ public class Event {
                 eventType,
                 start,
                 end);
+        if (creatorId == null) {
+            throw new IllegalArgumentException("Event creator is required");
+        }
         Event event = new Event();
         event.name = name;
         event.description = description;
@@ -92,6 +99,7 @@ public class Event {
         event.status = EventStatus.DRAFT;
         event.start = start;
         event.end = end;
+        event.creatorId = creatorId;
         return event;
 
     }
@@ -100,6 +108,12 @@ public class Event {
             throw new InvalidEventStateException("Only draft events can be published");
         }
         this.status = EventStatus.PUBLISHED;
+    }
+
+    public void assertCreator(UUID userId) {
+        if (creatorId == null || !creatorId.equals(userId)) {
+            throw new EventAccessDeniedException();
+        }
     }
 
     public void updateDetails(
@@ -248,6 +262,8 @@ public class Event {
         return updatedAt;
     }
 
+    public UUID getCreatorId() { return creatorId; }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -307,4 +323,6 @@ public class Event {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public void setCreatorId(UUID creatorId) { this.creatorId = creatorId; }
 }
