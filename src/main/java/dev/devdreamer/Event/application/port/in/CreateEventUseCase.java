@@ -4,6 +4,7 @@ import dev.devdreamer.Event.domain.Event;
 import dev.devdreamer.Event.domain.enums.EventType;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public interface CreateEventUseCase {
     Event execute (CreateEventCommand command);
@@ -15,6 +16,7 @@ public interface CreateEventUseCase {
             Integer capacity,
             EventType eventType,
             LocalDateTime start,
-            LocalDateTime end
+            LocalDateTime end,
+            UUID creatorId
     ){}
 }

@@ -4,9 +4,10 @@ import dev.devdreamer.Event.domain.Event;
 import dev.devdreamer.Event.domain.enums.EventType;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public interface UpdateEventUseCase {
-    Event execute(String id, UpdateEventCommand command);
+    Event execute(String id, UpdateEventCommand command, UUID userId);
 
     record UpdateEventCommand(
             String name,
