@@ -22,7 +22,7 @@ public class LoginUseCaseImpl implements LoginUseCase {
     public LoginResult execute(String email, String password) {
         var user = users.findByEmail(User.normalizeEmail(email)).orElseThrow(InvalidCredentialsException::new);
         if (!passwordHasher.matches(password, user.passwordHash())) throw new InvalidCredentialsException();
-        var token = tokenIssuer.issue(user.email());
+        var token = tokenIssuer.issue(user.email(), user.id());
         return new LoginResult(token.value(), "Bearer", token.expiresAt());
     }
 }
