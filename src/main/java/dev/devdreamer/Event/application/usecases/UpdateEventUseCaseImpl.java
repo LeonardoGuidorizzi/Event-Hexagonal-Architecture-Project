@@ -4,6 +4,7 @@ import dev.devdreamer.Event.application.port.in.UpdateEventUseCase;
 import dev.devdreamer.Event.application.port.out.EventRepository;
 import dev.devdreamer.Event.domain.Event;
 import dev.devdreamer.Event.domain.exception.EventNotFoundException;
+import java.util.UUID;
 
 public class UpdateEventUseCaseImpl implements UpdateEventUseCase {
     private final EventRepository repository;
@@ -13,9 +14,10 @@ public class UpdateEventUseCaseImpl implements UpdateEventUseCase {
     }
 
     @Override
-    public Event execute(String id, UpdateEventCommand command) {
+    public Event execute(String id, UpdateEventCommand command, UUID userId) {
         Event event = repository.findEventById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
+        event.assertCreator(userId);
         event.updateDetails(
                 command.name(),
                 command.description(),
