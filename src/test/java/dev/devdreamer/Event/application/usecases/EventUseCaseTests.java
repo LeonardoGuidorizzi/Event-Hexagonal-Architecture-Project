@@ -32,6 +32,7 @@ class EventUseCaseTests {
     private static final LocalDateTime END = START.plusHours(2);
     private static final Instant NOW = Instant.parse("2030-04-01T12:00:00Z");
     private static final Clock CLOCK = Clock.fixed(NOW, ZoneOffset.UTC);
+    private static final UUID OWNER = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
     @Test
     void createEventPersistsNewDraft() {
@@ -51,7 +52,7 @@ class EventUseCaseTests {
         CreateEventUseCase useCase = new CreateEventUseCaseImpl(events);
 
         assertThrows(IllegalArgumentException.class, () -> useCase.execute(new CreateEventUseCase.CreateEventCommand(
-                " ", "Description", "Place", "Host", 10, EventType.MUSIC, START, END)));
+                " ", "Description", "Place", "Host", 10, EventType.MUSIC, START, END, OWNER)));
         assertTrue(events.saved.isEmpty());
     }
 
@@ -61,9 +62,9 @@ class EventUseCaseTests {
         CreateEventUseCase useCase = new CreateEventUseCaseImpl(events);
 
         assertThrows(IllegalArgumentException.class, () -> useCase.execute(new CreateEventUseCase.CreateEventCommand(
-                "Meetup", "Description", "Place", "Host", 0, EventType.MUSIC, START, END)));
+                "Meetup", "Description", "Place", "Host", 0, EventType.MUSIC, START, END, OWNER)));
         assertThrows(IllegalArgumentException.class, () -> useCase.execute(new CreateEventUseCase.CreateEventCommand(
-                "Meetup", "Description", "Place", "Host", 10, EventType.MUSIC, START, START)));
+                "Meetup", "Description", "Place", "Host", 10, EventType.MUSIC, START, START, OWNER)));
         assertTrue(events.saved.isEmpty());
     }
 
@@ -73,12 +74,12 @@ class EventUseCaseTests {
         Event draft = event();
         events.existing = draft;
 
-        Event published = new PublishEventUseCaseImpl(events).execute("event-1");
+        Event published = new PublishEventUseCaseImpl(events).execute("event-1", OWNER);
         assertSame(draft, published);
         assertEquals(EventStatus.PUBLISHED, published.getStatus());
         assertSame(published, events.saved.getFirst());
 
-        Event cancelled = new CancelEventUseCaseImpl(events).execute("event-1");
+        Event cancelled = new CancelEventUseCaseImpl(events).execute("event-1", OWNER);
         assertSame(published, cancelled);
         assertEquals(EventStatus.CANCELLED, cancelled.getStatus());
         assertNotNull(cancelled.getCancelledAt());
@@ -88,20 +89,20 @@ class EventUseCaseTests {
     @Test
     void publishAndCancelPropagateMissingEventAndInvalidState() {
         FakeEvents missing = new FakeEvents();
-        assertThrows(EventNotFoundException.class, () -> new PublishEventUseCaseImpl(missing).execute("missing"));
-        assertThrows(EventNotFoundException.class, () -> new CancelEventUseCaseImpl(missing).execute("missing"));
+        assertThrows(EventNotFoundException.class, () -> new PublishEventUseCaseImpl(missing).execute("missing", OWNER));
+        assertThrows(EventNotFoundException.class, () -> new CancelEventUseCaseImpl(missing).execute("missing", OWNER));
         assertTrue(missing.saved.isEmpty());
 
         FakeEvents alreadyPublished = new FakeEvents();
         alreadyPublished.existing = event();
         alreadyPublished.existing.publish();
-        assertThrows(InvalidEventStateException.class, () -> new PublishEventUseCaseImpl(alreadyPublished).execute("event-1"));
+        assertThrows(InvalidEventStateException.class, () -> new PublishEventUseCaseImpl(alreadyPublished).execute("event-1", OWNER));
         assertTrue(alreadyPublished.saved.isEmpty());
 
         FakeEvents alreadyCancelled = new FakeEvents();
         alreadyCancelled.existing = event();
         alreadyCancelled.existing.cancel();
-        assertThrows(InvalidEventStateException.class, () -> new CancelEventUseCaseImpl(alreadyCancelled).execute("event-1"));
+        assertThrows(InvalidEventStateException.class, () -> new CancelEventUseCaseImpl(alreadyCancelled).execute("event-1", OWNER));
         assertTrue(alreadyCancelled.saved.isEmpty());
     }
 
@@ -112,7 +113,7 @@ class EventUseCaseTests {
         UpdateEventUseCase.UpdateEventCommand command = new UpdateEventUseCase.UpdateEventCommand(
                 "Updated", "New description", "New place", "Sam", 15, EventType.SEMINAR, START.plusDays(1), END.plusDays(1));
 
-        Event updated = new UpdateEventUseCaseImpl(events).execute("event-1", command);
+        Event updated = new UpdateEventUseCaseImpl(events).execute("event-1", command, OWNER);
 
         assertSame(events.existing, updated);
         assertEquals("Updated", updated.getName());
@@ -124,13 +125,13 @@ class EventUseCaseTests {
     @Test
     void updateEventDoesNotSaveMissingOrInvalidUpdate() {
         FakeEvents missing = new FakeEvents();
-        assertThrows(EventNotFoundException.class, () -> new UpdateEventUseCaseImpl(missing).execute("missing", updateCommand()));
+        assertThrows(EventNotFoundException.class, () -> new UpdateEventUseCaseImpl(missing).execute("missing", updateCommand(), OWNER));
         assertTrue(missing.saved.isEmpty());
 
         FakeEvents published = new FakeEvents();
         published.existing = event();
         published.existing.publish();
-        assertThrows(InvalidEventStateException.class, () -> new UpdateEventUseCaseImpl(published).execute("event-1", updateCommand()));
+        assertThrows(InvalidEventStateException.class, () -> new UpdateEventUseCaseImpl(published).execute("event-1", updateCommand(), OWNER));
         assertTrue(published.saved.isEmpty());
     }
 
@@ -139,11 +140,11 @@ class EventUseCaseTests {
         FakeEvents events = new FakeEvents();
         DeleteEventUseCase useCase = new DeleteEventUseCaseImpl(events);
 
-        useCase.execute("event-1");
+        useCase.execute("event-1", OWNER);
         assertEquals(List.of("event-1"), events.deletedIds);
 
         events.deleteResult = false;
-        assertThrows(EventNotFoundException.class, () -> useCase.execute("missing"));
+        assertThrows(EventNotFoundException.class, () -> useCase.execute("missing", OWNER));
         assertEquals(List.of("event-1", "missing"), events.deletedIds);
     }
 
@@ -214,7 +215,7 @@ class EventUseCaseTests {
     void signUpForEventRejectsFullEventWithoutSavingParticipantOrEvent() {
         FakeEvents events = new FakeEvents();
         events.existing = Event.create("Full", "Description", "Place", "Host", 1,
-                START, END, EventType.MUSIC);
+                START, END, EventType.MUSIC, OWNER);
         events.existing.publish();
         events.existing.setRegisteredCount(1);
         FakeUsers users = new FakeUsers();
@@ -236,7 +237,7 @@ class EventUseCaseTests {
         Clock clockAtEnd = Clock.fixed(now.toInstant(ZoneOffset.UTC), ZoneOffset.UTC);
         FakeEvents events = new FakeEvents();
         events.existing = Event.create("Ending", "Description", "Place", "Host", 5,
-                now.minusHours(2), now, EventType.MUSIC);
+                now.minusHours(2), now, EventType.MUSIC, OWNER);
         events.existing.publish();
         FakeUsers users = new FakeUsers();
         users.existing = new User(UUID.randomUUID(), "person@example.com", "hash", null);
@@ -263,7 +264,7 @@ class EventUseCaseTests {
 
     private static CreateEventUseCase.CreateEventCommand createCommand() {
         return new CreateEventUseCase.CreateEventCommand("Meetup", "Description", "Place", "Host", 10,
-                EventType.MUSIC, START, END);
+                EventType.MUSIC, START, END, OWNER);
     }
 
     private static UpdateEventUseCase.UpdateEventCommand updateCommand() {
@@ -272,7 +273,7 @@ class EventUseCaseTests {
     }
 
     private static Event event() {
-        return Event.create("Meetup", "Description", "Place", "Host", 10, START, END, EventType.MUSIC);
+        return Event.create("Meetup", "Description", "Place", "Host", 10, START, END, EventType.MUSIC, OWNER);
     }
 
     private static final class FakeEvents implements EventRepository {
