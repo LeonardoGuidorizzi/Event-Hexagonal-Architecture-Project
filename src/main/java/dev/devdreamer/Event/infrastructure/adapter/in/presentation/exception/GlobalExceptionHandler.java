@@ -7,6 +7,7 @@ import dev.devdreamer.Event.domain.exception.InvalidEventStateException;
 import dev.devdreamer.Event.domain.exception.EmailAlreadyRegisteredException;
 import dev.devdreamer.Event.domain.exception.InvalidCredentialsException;
 import dev.devdreamer.Event.domain.exception.DuplicateEventSignUpException;
+import dev.devdreamer.Event.domain.exception.EventAccessDeniedException;
 import org.springframework.dao.DataIntegrityViolationException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EventNotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(EventNotFoundException exception) {
         return error(HttpStatus.NOT_FOUND, exception.getMessage(), Map.of());
+    }
+
+    @ExceptionHandler(EventAccessDeniedException.class)
+    public ResponseEntity<ApiError> handleAccessDenied(EventAccessDeniedException exception) {
+        return error(HttpStatus.FORBIDDEN, exception.getMessage(), Map.of());
     }
 
     @ExceptionHandler({InvalidEventStateException.class, EventCapacityExceededException.class})
