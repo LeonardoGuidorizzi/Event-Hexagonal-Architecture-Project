@@ -7,12 +7,14 @@ import dev.devdreamer.Event.domain.exception.InvalidEventStateException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EventTest {
     private static final LocalDateTime START = LocalDateTime.of(2030, 5, 1, 10, 0);
     private static final LocalDateTime END = START.plusHours(2);
+    private static final UUID OWNER = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
     @Test
     void createBuildsDraftWithZeroRegistrationsAndGeneratedIdentifier() {
@@ -34,15 +36,15 @@ class EventTest {
 
     @Test
     void createRejectsMissingRequiredDetailsInvalidCapacityAndInvalidDates() {
-        assertThrows(IllegalArgumentException.class, () -> Event.create(null, "Description", "Place", "Host", 1, START, END, EventType.MUSIC));
-        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", " ", "Place", "Host", 1, START, END, EventType.MUSIC));
-        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 0, START, END, EventType.MUSIC));
-        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", -1, START, END, EventType.MUSIC));
-        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, START, END, null));
-        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, null, END, EventType.MUSIC));
-        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, START, null, EventType.MUSIC));
-        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, START, START, EventType.MUSIC));
-        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, END, START, EventType.MUSIC));
+        assertThrows(IllegalArgumentException.class, () -> Event.create(null, "Description", "Place", "Host", 1, START, END, EventType.MUSIC, OWNER));
+        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", " ", "Place", "Host", 1, START, END, EventType.MUSIC, OWNER));
+        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 0, START, END, EventType.MUSIC, OWNER));
+        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", -1, START, END, EventType.MUSIC, OWNER));
+        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, START, END, null, OWNER));
+        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, null, END, EventType.MUSIC, OWNER));
+        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, START, null, EventType.MUSIC, OWNER));
+        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, START, START, EventType.MUSIC, OWNER));
+        assertThrows(IllegalArgumentException.class, () -> Event.create("Name", "Description", "Place", "Host", 1, END, START, EventType.MUSIC, OWNER));
     }
 
     @Test
@@ -134,7 +136,7 @@ class EventTest {
     @Test
     void signupAtOneSlotCapacityFillsEventAndCannotExceedCapacity() {
         Event event = Event.create("Small event", "Description", "Place", "Host", 1,
-                START, END, EventType.MUSIC);
+                START, END, EventType.MUSIC, OWNER);
         event.publish();
 
         event.signUpParticipant(START.minusNanos(1));
@@ -170,6 +172,6 @@ class EventTest {
 
     private Event newEvent() {
         return Event.create("Community meetup", "A talk and discussion", "Main hall", "Alex",
-                25, START, END, EventType.WORKSHOP);
+                25, START, END, EventType.WORKSHOP, OWNER);
     }
 }
