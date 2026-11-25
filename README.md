@@ -46,7 +46,7 @@ When the application is running locally:
 | `POST` | `/api/v1/auth/login` | Log in | `200 OK` with an access token |
 | `POST` | `/api/v1/auth/logout` | Revoke the current access token | `200 OK` |
 
-Auth signup accepts `name`, `lastname`, `birthdate`, `email`, and `password`. `Account` stores the profile fields and `User` stores the login credentials. Auth signup and login routes are public; other routes require `Authorization: Bearer <accessToken>`. Event signup is limited to published events that have not ended, rejects duplicate participation, and tracks participation per user. Passwords use BCrypt and access tokens expire after 15 minutes. Configure `JWT_SECRET_BASE64` with a Base64 encoded random key of at least 32 bytes (for example, `openssl rand -base64 32`).
+Auth signup accepts `name`, `lastname`, `birthdate`, `email`, and `password`. `Account` stores the profile fields and `User` stores the login credentials. Auth signup and login routes are public; other routes require `Authorization: Bearer <accessToken>`. The user who creates an event is its creator and only that user can update, publish, cancel, or delete it. Event signup is limited to published events that have not ended, rejects duplicate participation, and tracks participation per user. Passwords use BCrypt and access tokens expire after 15 minutes. Configure `JWT_SECRET_BASE64` with a Base64 encoded random key of at least 32 bytes (for example, `openssl rand -base64 32`).
 
 Create request example:
 
