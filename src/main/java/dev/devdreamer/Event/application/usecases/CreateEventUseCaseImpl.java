@@ -21,7 +21,7 @@ public class CreateEventUseCaseImpl implements CreateEventUseCase {
                 command.capacity(),
                 command.start(),
                 command.end(),
-                command.eventType());
+                command.eventType(), command.creatorId());
         return repository.save(event);
     }
 }

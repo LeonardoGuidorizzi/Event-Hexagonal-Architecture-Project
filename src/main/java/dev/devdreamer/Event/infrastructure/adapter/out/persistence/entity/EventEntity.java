@@ -44,6 +44,8 @@ public class EventEntity {
     public LocalDateTime createdAt;
     @Column(name = "updated_at")
     public LocalDateTime updatedAt;
+    @Column(name = "creator_id")
+    public UUID creatorId;
 
     public EventEntity() {}
 

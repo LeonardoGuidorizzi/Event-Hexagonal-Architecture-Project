@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import java.util.UUID;
 
 
 @Controller
@@ -45,8 +46,8 @@ public class EventPresentation {
 
     @PostMapping()
     @Operation(summary = "Create an event", description = "Creates an event using the supplied details.")
-    public ResponseEntity<EventResponse> createEvent (@Valid @RequestBody CreateEventRequest request){
-        var command = mapper.toCommand(request);
+    public ResponseEntity<EventResponse> createEvent (@Valid @RequestBody CreateEventRequest request, JwtAuthenticationToken authentication){
+        var command = mapper.toCommand(request, userId(authentication));
         var event = createEventUseCase.execute(command);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(event));
     }
@@ -75,22 +76,22 @@ public class EventPresentation {
     @Timed(value = "PublishEventEndPoint", description = "it shows how long it takes to give the publish result")
     @PostMapping("publish/{id}")
     @Operation(summary = "Publish an event", description = "Publishes the event identified by its ID.")
-    public ResponseEntity<EventResponse> publishEvent(@PathVariable String id){
-        var event = publishEventUseCase.execute(id);
+    public ResponseEntity<EventResponse> publishEvent(@PathVariable String id, JwtAuthenticationToken authentication){
+        var event = publishEventUseCase.execute(id, userId(authentication));
         return ResponseEntity.status(HttpStatus.OK).body(mapper.toResponse(event));
     }
     @Timed(value = "CancelEventEndPoint", description = "it shows how long it takes to give the cancel result")
     @PostMapping("cancel/{id}")
     @Operation(summary = "Cancel an event", description = "Cancels the event identified by its ID.")
-    public ResponseEntity<EventResponse> cancelEvent(@PathVariable String id){
-        var event = cancelEventUseCase.execute(id);
+    public ResponseEntity<EventResponse> cancelEvent(@PathVariable String id, JwtAuthenticationToken authentication){
+        var event = cancelEventUseCase.execute(id, userId(authentication));
         return ResponseEntity.status(HttpStatus.OK).body(mapper.toResponse(event));
     }
 
     @DeleteMapping("{id}")
     @Operation(summary = "Delete an event", description = "Deletes the event identified by its ID.")
-    public ResponseEntity<Void> deleteEvent(@PathVariable String id) {
-        deleteEventUseCase.execute(id);
+    public ResponseEntity<Void> deleteEvent(@PathVariable String id, JwtAuthenticationToken authentication) {
+        deleteEventUseCase.execute(id, userId(authentication));
         return ResponseEntity.noContent().build();
     }
 
@@ -98,9 +99,10 @@ public class EventPresentation {
     @Operation(summary = "Update an event", description = "Updates an event while it is in draft status.")
     public ResponseEntity<EventResponse> updateEvent(
             @PathVariable String id,
-            @Valid @RequestBody CreateEventRequest request
+            @Valid @RequestBody CreateEventRequest request,
+            JwtAuthenticationToken authentication
     ) {
-        var event = updateEventUseCase.execute(id, mapper.toUpdateCommand(request));
+        var event = updateEventUseCase.execute(id, mapper.toUpdateCommand(request), userId(authentication));
         return ResponseEntity.ok(mapper.toResponse(event));
     }
 
@@ -110,6 +112,10 @@ public class EventPresentation {
     public ResponseEntity<EventResponse> signUpForEvent(@PathVariable String id, JwtAuthenticationToken authentication) {
         var event = signUpForEventUseCase.execute(id, authentication.getToken().getSubject());
         return ResponseEntity.ok(mapper.toResponse(event));
+    }
+
+    private UUID userId(JwtAuthenticationToken authentication) {
+        return UUID.fromString(authentication.getToken().getClaimAsString("user_id"));
     }
 
 

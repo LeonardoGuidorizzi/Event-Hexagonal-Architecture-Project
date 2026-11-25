@@ -28,7 +28,7 @@ public class SignUpUseCaseImpl implements SignUpUseCase {
         validate(command);
         User user = users.save(new User(UUID.randomUUID(), email, passwordHasher.hash(command.password()), null));
         accounts.save(new Account(UUID.randomUUID(), user.id(), command.name().trim(), command.lastname().trim(), command.birthdate()));
-        var token = tokenIssuer.issue(email);
+        var token = tokenIssuer.issue(email, user.id());
         return new SignUpResult(token.value(), "Bearer", token.expiresAt());
     }
 
